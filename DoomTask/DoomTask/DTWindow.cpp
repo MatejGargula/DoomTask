@@ -1,8 +1,74 @@
 #include "DTWindow.h"
 
+#define DTWND_EXPCEPT (hr) DTWindow::Exception(__LINE__, __FILE__, hr)
+#define DTWND_LAST_EXCEPT ( ) DTWindow::Exception(__LINE__, __FILE__, GetLastError())
+
 DTWindow::DTWindowClass DTWindow::DTWindowClass::wndClass;
 
-#pragma region Nested Class 
+#pragma region Nested Classes
+
+DTWindow::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
+	:
+	DTException(line, file),
+	hr(hr)
+{
+}
+
+const char* DTWindow::Exception::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << GetType() << std::endl
+		<< "|ERROR CODE| -> " << GetErrorCode() << std::endl
+		<< "|DESCRIPTION| -> " << GetErrorString() << std::endl
+		<< GetOriginString();
+
+	whatBuffer = oss.str();
+
+	return whatBuffer.c_str();
+}
+
+const char* DTWindow::Exception::GetType() const noexcept
+{
+	return "DT Window Exception";
+}
+
+std::string DTWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
+{
+	char* pMsgBuff = nullptr;
+	DWORD nMsgLen = FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr,
+		hr,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		reinterpret_cast<LPWSTR>(&pMsgBuff),
+		0,
+		nullptr
+	);
+
+	if (nMsgLen == 0)
+	{
+		return "Unknown error code";
+	}
+
+	std::string errorString = pMsgBuff;
+	LocalFree(pMsgBuff);
+
+	return errorString;
+}
+
+HRESULT DTWindow::Exception::GetErrorCode() const noexcept
+{
+	return hr;
+}
+
+std::string DTWindow::Exception::GetErrorString() const noexcept
+{
+	return TranslateErrorCode(hr);
+}
+
+
 DTWindow::DTWindowClass::DTWindowClass() noexcept
 	:
 	hInstance(GetModuleHandle(nullptr))
@@ -54,8 +120,9 @@ DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
 	wr.bottom = h + wr.top;
 
 	// Adjust size of the window to match the given height and width
-	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
-
+	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
+		throw DTWindow::Exception(__LINE__, __FILE__, GetLastError());
+	
 	hWnd = CreateWindow(
 		DTWindowClass::GetName(),
 		name,
@@ -70,6 +137,10 @@ DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
 		this
 	);
 
+	if (hWnd == nullptr)
+		throw DTWindow::Exception(__LINE__, __FILE__, GetLastError());
+	
+	// Needs to be called. Otherwise the window will remain invisible.
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 }
 
@@ -109,11 +180,81 @@ LRESULT DTWindow::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 {
 	switch (msg) 
 	{
-	case WM_CLOSE:
-		PostQuitMessage(0);
+	case WM_CLOSE: 
+	{
+		PostQuitMessage(0); // For red x button in window corner 
 		return 0;
 	}
+	case WM_KILLFOCUS: 
+	{
+		keyboard.ClearState();
+		break;
+	}
+		
+	case WM_KEYDOWN:
+	{
+		if (!(lParam & 0x40000000) || keyboard.AutorepeatIsEnabled()) 
+			keyboard.OnKeyPressed(static_cast<unsigned char>(wParam));
+		break;
+	}
+	case WM_KEYUP:
+	{
+		keyboard.OnKeyReleased(static_cast<unsigned char>(wParam));
+		break;
+	}
+	case WM_CHAR:
+	{
+		keyboard.OnChar(static_cast<unsigned char>(wParam));
+		break;
+	}
+	case WM_MOUSEMOVE:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnMouseMove(pt.x, pt.y);
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnLeftPressed(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnRightPressed(pt.x, pt.y);
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnLeftReleased(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnRightReleased(pt.x, pt.y);
+		break;
+	}
+	case WM_MOUSEWHEEL:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		
+		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+		{
+			mouse.OnWheelUp(pt.x, pt.y);
+		}
+		else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+		{
+			mouse.OnWheelDown(pt.x, pt.y);
+		}
 
+		break;
+	}
+
+
+	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
