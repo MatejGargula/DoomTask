@@ -142,11 +142,34 @@ DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
 	
 	// Needs to be called. Otherwise the window will remain invisible.
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+	gfx = std::make_unique<DTGraphics>(hWnd);
 }
 
 DTWindow::~DTWindow()
 {
 	DestroyWindow(hWnd);
+}
+
+std::optional<int> DTWindow::ProcessMessages()
+{
+	MSG msg;
+
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+			return msg.wParam;
+		
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	return {};
+}
+
+DTGraphics& DTWindow::Gfx()
+{
+	return *gfx;
 }
 
 LRESULT DTWindow::HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
@@ -240,15 +263,8 @@ LRESULT DTWindow::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	case WM_MOUSEWHEEL:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
-		
-		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-		{
-			mouse.OnWheelUp(pt.x, pt.y);
-		}
-		else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
-		{
-			mouse.OnWheelDown(pt.x, pt.y);
-		}
+		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+		mouse.OnWheelDelta(pt.x, pt.y, delta);
 
 		break;
 	}

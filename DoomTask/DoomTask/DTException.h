@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 
+//TODO: Add docs
 class DTException : public std::exception
 {
 public:

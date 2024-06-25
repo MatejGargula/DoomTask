@@ -4,6 +4,7 @@
 #include <bitset>
 #include <optional>
 
+//TODO: Add docs
 class Keyboard
 {
 	friend class DTWindow;

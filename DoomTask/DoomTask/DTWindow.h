@@ -1,16 +1,22 @@
 #pragma once
 
+#include <optional>
+#include <memory>
+
 #include "DTWnds.h"
+#include "DTGraphics.h"
 #include "DTException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 
+//TODO: Add docs
 class DTWindow
 {
 private:
 	int width;
 	int height;
 	HWND hWnd;
+	std::unique_ptr<DTGraphics> gfx;
 
 #pragma region Nested Classes
 	class Exception : public DTException
@@ -57,4 +63,6 @@ public:
 	~DTWindow();
 	DTWindow(const DTWindow&) = delete;
 	DTWindow& operator=(const DTWindow&) = delete;
+	static std::optional<int> ProcessMessages();
+	DTGraphics& Gfx();
 };
