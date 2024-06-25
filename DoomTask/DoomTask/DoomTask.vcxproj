@@ -143,6 +143,8 @@
     <ClCompile Include="DTException.cpp" />
     <ClCompile Include="DTGraphics.cpp" />
     <ClCompile Include="DTWindow.cpp" />
+    <ClCompile Include="dxerr.cpp" />
+    <ClCompile Include="DXGIInfoManager.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -152,8 +154,11 @@
     <ClInclude Include="DTApp.h" />
     <ClInclude Include="DTException.h" />
     <ClInclude Include="DTGraphics.h" />
+    <ClInclude Include="DTThrowMacros.h" />
     <ClInclude Include="DTWindow.h" />
     <ClInclude Include="DTWnds.h" />
+    <ClInclude Include="dxerr.h" />
+    <ClInclude Include="DXGIInfoManager.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Timer.h" />

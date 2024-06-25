@@ -1,73 +1,72 @@
 #include "DTWindow.h"
-
-#define DTWND_EXPCEPT (hr) DTWindow::Exception(__LINE__, __FILE__, hr)
-#define DTWND_LAST_EXCEPT ( ) DTWindow::Exception(__LINE__, __FILE__, GetLastError())
+#include "DTThrowMacros.h"
 
 DTWindow::DTWindowClass DTWindow::DTWindowClass::wndClass;
 
 #pragma region Nested Classes
 
-DTWindow::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
+std::string DTWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
+{
+	char* pMsgBuf = nullptr;
+	// windows will allocate memory for err string and make our pointer point to it
+	const DWORD nMsgLen = FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		reinterpret_cast<LPWSTR>(&pMsgBuf), 0, nullptr
+	);
+	// 0 string length returned indicates a failure
+	if (nMsgLen == 0)
+	{
+		return "Unidentified error code";
+	}
+	// copy error string from windows-allocated buffer to std::string
+	std::string errorString = pMsgBuf;
+	// free windows buffer
+	LocalFree(pMsgBuf);
+	return errorString;
+}
+
+
+DTWindow::HrException::HrException(int line, const char* file, HRESULT hr) noexcept
 	:
-	DTException(line, file),
+	Exception(line, file),
 	hr(hr)
 {
 }
 
-const char* DTWindow::Exception::what() const noexcept
+const char* DTWindow::HrException::what() const noexcept
 {
 	std::ostringstream oss;
 	oss << GetType() << std::endl
-		<< "|ERROR CODE| -> " << GetErrorCode() << std::endl
-		<< "|DESCRIPTION| -> " << GetErrorString() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
 		<< GetOriginString();
-
 	whatBuffer = oss.str();
-
 	return whatBuffer.c_str();
 }
 
-const char* DTWindow::Exception::GetType() const noexcept
+const char* DTWindow::HrException::GetType() const noexcept
 {
-	return "DT Window Exception";
+	return "Window Exception";
 }
 
-std::string DTWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
-{
-	char* pMsgBuff = nullptr;
-	DWORD nMsgLen = FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER |
-		FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		nullptr,
-		hr,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		reinterpret_cast<LPWSTR>(&pMsgBuff),
-		0,
-		nullptr
-	);
-
-	if (nMsgLen == 0)
-	{
-		return "Unknown error code";
-	}
-
-	std::string errorString = pMsgBuff;
-	LocalFree(pMsgBuff);
-
-	return errorString;
-}
-
-HRESULT DTWindow::Exception::GetErrorCode() const noexcept
+HRESULT DTWindow::HrException::GetErrorCode() const noexcept
 {
 	return hr;
 }
 
-std::string DTWindow::Exception::GetErrorString() const noexcept
+std::string DTWindow::HrException::GetErrorDescription() const noexcept
 {
-	return TranslateErrorCode(hr);
+	return Exception::TranslateErrorCode(hr);
 }
 
+
+const char* DTWindow::NoGfxException::GetType() const noexcept
+{
+	return "Window Exception [No Graphics]";
+}
 
 DTWindow::DTWindowClass::DTWindowClass() noexcept
 	:
@@ -105,6 +104,7 @@ HINSTANCE DTWindow::DTWindowClass::GetInstance() noexcept
 {
 	return wndClass.hInstance;
 }
+
 #pragma endregion
 
 DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
@@ -121,7 +121,7 @@ DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
 
 	// Adjust size of the window to match the given height and width
 	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
-		throw DTWindow::Exception(__LINE__, __FILE__, GetLastError());
+		throw DTWND_LAST_EXCEPT();
 	
 	hWnd = CreateWindow(
 		DTWindowClass::GetName(),
@@ -138,7 +138,7 @@ DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
 	);
 
 	if (hWnd == nullptr)
-		throw DTWindow::Exception(__LINE__, __FILE__, GetLastError());
+		throw DTWND_LAST_EXCEPT();
 	
 	// Needs to be called. Otherwise the window will remain invisible.
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -169,6 +169,9 @@ std::optional<int> DTWindow::ProcessMessages()
 
 DTGraphics& DTWindow::Gfx()
 {
+	if (!gfx)
+		throw NoGfxException(__LINE__, __FILE__);
+
 	return *gfx;
 }
 
@@ -273,4 +276,5 @@ LRESULT DTWindow::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
 

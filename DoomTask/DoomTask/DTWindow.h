@@ -19,19 +19,32 @@ private:
 	std::unique_ptr<DTGraphics> gfx;
 
 #pragma region Nested Classes
+public:
 	class Exception : public DTException
 	{
+		using DTException::DTException;
+	public:
+		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+	};
+	class HrException : public Exception
+	{
+	public:
+		HrException(int line, const char* file, HRESULT hr) noexcept;
+		const char* what() const noexcept override;
+		const char* GetType() const noexcept override;
+		HRESULT GetErrorCode() const noexcept;
+		std::string GetErrorDescription() const noexcept;
 	private:
 		HRESULT hr;
+	};
+	class NoGfxException : public Exception
+	{
 	public:
-		Exception(int line, const char* file, HRESULT hr) noexcept;
-		const char* what() const noexcept override;
-		virtual const char* GetType() const noexcept override;
-		static std::string TranslateErrorCode(HRESULT hr) noexcept;
-		HRESULT GetErrorCode() const noexcept;
-		std::string GetErrorString() const noexcept;
+		using Exception::Exception;
+		const char* GetType() const noexcept override;
 	};
 
+private:
 	class DTWindowClass
 	{
 	private:
@@ -50,6 +63,7 @@ private:
 #pragma endregion
 
 #pragma region Windows Callback
+private:
 	static LRESULT CALLBACK HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMessageThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT CALLBACK HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;	
