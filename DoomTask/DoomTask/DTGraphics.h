@@ -2,6 +2,7 @@
 
 #include "DTWnds.h"
 #include "DTException.h"
+#include "DXGIInfoManager.h"
 
 #include <wrl.h>
 #include <d3d11.h>
@@ -17,6 +18,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 
+	DxgiInfoManager infoManager;
 public:
 #pragma region Nested Classes
 
@@ -68,5 +70,6 @@ public:
 
 	void EndFrame();
 	void ClearBuffer(float r, float g, float b) noexcept;
+	void DrawTestTriangle();
 };
 

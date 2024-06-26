@@ -32,7 +32,10 @@ const std::string& DTException::GetFile() const noexcept
 
 std::string DTException::GetOriginString() const noexcept
 {
-	return std::string();
+	std::ostringstream oss;
+	oss << "[File] " << file << std::endl
+		<< "[Line] " << line;
+	return oss.str();
 }
 
 

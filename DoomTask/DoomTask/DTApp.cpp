@@ -2,7 +2,7 @@
 
 DTApp::DTApp()
 	:
-	window(800,600,L"DoomTask")
+	window(800,600,"DoomTask")
 {}
 
 int DTApp::Run()
@@ -37,6 +37,8 @@ void DTApp::RunFrame()
 {
 	const float c = std::sin(timer.Peek() / 2.0f + 0.5f); // Testing Delete later
 	window.Gfx().ClearBuffer(1.0f, c, 1.0f);
+
+	window.Gfx().DrawTestTriangle();
 
 	window.Gfx().EndFrame();
 }

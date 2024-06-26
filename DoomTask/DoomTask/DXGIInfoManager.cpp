@@ -7,13 +7,13 @@
 #pragma comment(lib, "dxguid.lib")
 
 
-DXGIInfoManager::DXGIInfoManager()
+DxgiInfoManager::DxgiInfoManager()
 {
 	// define function signature of DXGIGetDebugInterface
 	typedef HRESULT(WINAPI* DXGIGetDebugInterface)(REFIID, void**);
 
 	// load the dll that contains the function DXGIGetDebugInterface
-	const auto hModDxgiDebug = LoadLibraryEx(L"dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	const auto hModDxgiDebug = LoadLibraryEx("DXGIDebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
 	if (hModDxgiDebug == nullptr)
 	{
 		throw DTWND_LAST_EXCEPT();
@@ -32,17 +32,19 @@ DXGIInfoManager::DXGIInfoManager()
 	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pDxgiInfoQueue));
 }
 
-void DXGIInfoManager::Set() noexcept
+void DxgiInfoManager::Set() noexcept
 {
 	// set the index (next) so that the next all to GetMessages()
 	// will only get errors generated after this call
 	next = pDxgiInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
-std::vector<std::string> DXGIInfoManager::GetMessages() const
+std::vector<std::string> DxgiInfoManager::GetMessages() const
 {
 	std::vector<std::string> messages;
+
 	const auto end = pDxgiInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
+	
 	for (auto i = next; i < end; i++)
 	{
 		HRESULT hr;

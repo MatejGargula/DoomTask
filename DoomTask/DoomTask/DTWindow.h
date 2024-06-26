@@ -48,7 +48,7 @@ private:
 	class DTWindowClass
 	{
 	private:
-		static constexpr const wchar_t* windowClassName = L"Doom Task";
+		static constexpr const char* windowClassName = "Doom Task";
 		static DTWindowClass wndClass;
 		HINSTANCE hInstance;
 		
@@ -57,7 +57,7 @@ private:
 		DTWindowClass(const DTWindowClass&) = delete;
 		DTWindowClass& operator=(const DTWindowClass&) = delete;
 	public:
-		static const wchar_t* GetName() noexcept;
+		static const char* GetName() noexcept;
 		static HINSTANCE GetInstance() noexcept;
 	};
 #pragma endregion
@@ -73,7 +73,7 @@ public:
 	Keyboard keyboard; // For keyboard input
 	Mouse mouse; // For mouse input 
 
-	DTWindow(int width, int height, const wchar_t* name) noexcept;
+	DTWindow(int width, int height, const char* name) noexcept;
 	~DTWindow();
 	DTWindow(const DTWindow&) = delete;
 	DTWindow& operator=(const DTWindow&) = delete;

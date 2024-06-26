@@ -3,7 +3,10 @@
 #include "DTWindow.h"
 #include "DTThrowMacros.h"
 
+#include <d3dcompiler.h>
+
 #pragma comment(lib, "d3d11.lib") // for linking of D3D11
+#pragma comment(lib, "D3DCompiler.lib") // Probably remove later
 
 DTGraphics::DTGraphics(HWND hWnd)
 {
@@ -42,6 +45,7 @@ DTGraphics::DTGraphics(HWND hWnd)
 	));
 
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
+
 	GFX_THROW_FAILED(pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_FAILED(pDevice->CreateRenderTargetView(
 		pBackBuffer.Get(),
@@ -71,6 +75,86 @@ void DTGraphics::ClearBuffer(float r, float g, float b) noexcept
 {
 	const float color[] = { r,g,b,1.0f };
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
+}
+
+void DTGraphics::DrawTestTriangle()
+{
+	struct Vertex
+	{
+		float x;
+		float y;
+	};
+
+	const Vertex vertices[] =
+	{
+		{0.0f, 0.5f},
+		{0.5, -0.5f},
+		{-0.5f, -0.5f}
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+	D3D11_BUFFER_DESC bd = {};
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0u;
+	bd.ByteWidth = sizeof(vertices);
+	bd.StructureByteStride = sizeof(Vertex);
+	D3D11_SUBRESOURCE_DATA sd = {};
+	sd.pSysMem = vertices;
+
+	HRESULT hr;
+
+	GFX_THROW_INFO(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
+
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+	
+	//Input layout
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
+	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+	GFX_THROW_INFO(D3DReadFileToBlob(L"SimpleVertexShader.cso", &pBlob));
+	GFX_THROW_INFO(pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
+	pContext->VSSetShader(pVertexShader.Get(), 0, 0);
+
+	GFX_THROW_INFO(pDevice->CreateInputLayout(
+		ied,
+		(UINT)std::size(ied),
+		pBlob->GetBufferPointer(),
+		pBlob->GetBufferSize(),
+		&pInputLayout
+		));
+
+	pContext->IASetInputLayout(pInputLayout.Get());
+
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
+	GFX_THROW_INFO(D3DReadFileToBlob(L"SimplePixelShader.cso", &pBlob));
+	GFX_THROW_INFO(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
+	pContext->PSSetShader(pPixelShader.Get(), 0, 0);
+
+	// Render target
+	pContext->OMSetRenderTargets(1u,pTarget.GetAddressOf(), nullptr);
+
+	pContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	D3D11_VIEWPORT vp;
+	vp.Width = 640;
+	vp.Height = 400;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	pContext->RSSetViewports(1u, &vp);
+
+	GFX_THROW_INFO_ONLY(pContext->Draw(std::size(vertices), 0u));
+
 }
 
 DTGraphics::HrException::HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs) noexcept
@@ -126,7 +210,7 @@ std::string DTGraphics::HrException::GetErrorString() const noexcept
 std::string DTGraphics::HrException::GetErrorDescription() const noexcept
 {
 	char buf[512];
-	DXGetErrorDescription(hr, (WCHAR*)buf, sizeof(buf));
+	DXGetErrorDescription(hr, buf, sizeof(buf));
 	return buf;
 }
 

@@ -9,17 +9,17 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		DTApp app;
 		return app.Run();
 	}
-	catch (DTException e)
+	catch (const DTException& e)
 	{
-		MessageBox(nullptr, reinterpret_cast<LPCWSTR>(e.what()), reinterpret_cast<LPCWSTR>(e.GetType()), MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
 	}
 	catch (const std::exception& e)
 	{
-		MessageBox(nullptr, reinterpret_cast<LPCWSTR>(e.what()), L"Standard Exception", MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, reinterpret_cast<LPCTSTR>(e.what()), "Standard Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	catch (...)
 	{
-		MessageBox(nullptr, L"No details available", L"Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	
 	return -1;

@@ -1,19 +1,17 @@
 #pragma once
 #include "DTWnds.h"
-#pragma warning(disable:4265)
 #include <wrl.h>
-#pragma warning(default:4265)
 #include <vector>
-#include <string>
 #include <dxgidebug.h>
+#include <string>
 
-class DXGIInfoManager
+class DxgiInfoManager
 {
 public:
-	DXGIInfoManager();
-	~DXGIInfoManager() = default;
-	DXGIInfoManager(const DXGIInfoManager&) = delete;
-	DXGIInfoManager& operator=(const DXGIInfoManager&) = delete;
+	DxgiInfoManager();
+	~DxgiInfoManager() = default;
+	DxgiInfoManager(const DxgiInfoManager&) = delete;
+	DxgiInfoManager& operator=(const DxgiInfoManager&) = delete;
 	void Set() noexcept;
 	std::vector<std::string> GetMessages() const;
 private:

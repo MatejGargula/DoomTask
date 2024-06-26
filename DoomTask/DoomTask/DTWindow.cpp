@@ -13,7 +13,7 @@ std::string DTWindow::Exception::TranslateErrorCode(HRESULT hr) noexcept
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		reinterpret_cast<LPWSTR>(&pMsgBuf), 0, nullptr
+		reinterpret_cast<LPSTR>(&pMsgBuf), 0, nullptr
 	);
 	// 0 string length returned indicates a failure
 	if (nMsgLen == 0)
@@ -95,7 +95,7 @@ DTWindow::DTWindowClass::~DTWindowClass() noexcept
 	UnregisterClass(windowClassName, GetInstance());
 }
 
-const wchar_t* DTWindow::DTWindowClass::GetName() noexcept
+const char* DTWindow::DTWindowClass::GetName() noexcept
 {
 	return windowClassName;
 }
@@ -107,7 +107,7 @@ HINSTANCE DTWindow::DTWindowClass::GetInstance() noexcept
 
 #pragma endregion
 
-DTWindow::DTWindow(int w, int h, const wchar_t* name) noexcept
+DTWindow::DTWindow(int w, int h, const char* name) noexcept
 	:
 	width(w),
 	height(h)
