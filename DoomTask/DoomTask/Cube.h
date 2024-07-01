@@ -9,11 +9,9 @@ public:
 	template<class V>
 	static IndexedTriangleList<V> Make()
 	{
-		namespace dx = DirectX;
-
 		constexpr float side = 1.0f / 2.0f;
 
-		std::vector<dx::XMFLOAT3> vertices;
+		std::vector<DirectX::XMFLOAT3> vertices;
 		vertices.emplace_back(-side, -side, -side); // 0
 		vertices.emplace_back(side, -side, -side); // 1
 		vertices.emplace_back(-side, side, -side); // 2

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DTGraphics.h"
 #include "DTRenderObjectBase.h"
 
 #include <DirectXMath.h>

@@ -1,5 +1,6 @@
 #include "DTApp.h"
 #include "RBox.h"
+#include "RTexPlane.h"
 
 #include <iostream>
 
@@ -9,12 +10,13 @@ DTApp::DTApp()
 {
 
 	std::shared_ptr<DTRenderObjectBase> box = std::make_shared<RBox>(window.Gfx());
+	std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
 
-	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(),box);
+	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(),plane);
 	so1->transform.SetPosition(0.0f, 0.0f,0.0f);
 	sceneObjects.push_back(std::move(so1));
 
-	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), box);
+	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), plane);
 	so2->transform.SetPosition(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(so2));
 

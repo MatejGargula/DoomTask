@@ -148,6 +148,8 @@
     <ClCompile Include="BIndexBuffer.cpp" />
     <ClCompile Include="BInputLayout.cpp" />
     <ClCompile Include="BPixelShader.cpp" />
+    <ClCompile Include="BSampler.cpp" />
+    <ClCompile Include="BTexture.cpp" />
     <ClCompile Include="BTopology.cpp" />
     <ClCompile Include="BTransform.cpp" />
     <ClCompile Include="BVertexBuffer.cpp" />
@@ -165,6 +167,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="DTRenderObjectBase.cpp" />
     <ClCompile Include="RBox.cpp" />
+    <ClCompile Include="RTexPlane.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
@@ -173,6 +176,8 @@
     <ClInclude Include="BIndexBuffer.h" />
     <ClInclude Include="BInputLayout.h" />
     <ClInclude Include="BPixelShader.h" />
+    <ClInclude Include="BSampler.h" />
+    <ClInclude Include="BTexture.h" />
     <ClInclude Include="BTopology.h" />
     <ClInclude Include="BTransform.h" />
     <ClInclude Include="BVertexBuffer.h" />
@@ -192,18 +197,21 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="DTRenderObjectBase.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="RBox.h" />
+    <ClInclude Include="RTexPlane.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ColorIndexPS.hlsl">
+    <FxCompile Include="PlaneTexPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="ColorIndexVS.hlsl">
+    <FxCompile Include="PlaneTexVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>

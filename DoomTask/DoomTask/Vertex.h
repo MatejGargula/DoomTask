@@ -7,6 +7,16 @@ struct VertexPos
 	DirectX::XMFLOAT3 pos;
 };
 
+struct VertexPosTex
+{
+	DirectX::XMFLOAT3 pos;
+	struct
+	{
+		float u;
+		float v;
+	} tex;
+};
+
 struct VertexPosCol
 {
 	DirectX::XMFLOAT3 pos;

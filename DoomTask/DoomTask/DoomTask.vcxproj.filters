@@ -28,6 +28,9 @@
     <Filter Include="Source Files\RenderObjects">
       <UniqueIdentifier>{4c42203f-f787-4ebf-8abc-2719ed692e39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Primitives">
+      <UniqueIdentifier>{25b94c6c-55de-4f85-808c-d5ad95179fda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -90,11 +93,20 @@
     <ClCompile Include="RBox.cpp">
       <Filter>Source Files\RenderObjects</Filter>
     </ClCompile>
-    <ClCompile Include="BTransform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IndexedTriangleList.h">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BTexture.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BTransform.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RTexPlane.cpp">
+      <Filter>Source Files\RenderObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BSampler.cpp">
+      <Filter>Source Files\BindObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,17 +176,32 @@
     <ClInclude Include="RBox.h">
       <Filter>Header Files\RenderObjects</Filter>
     </ClInclude>
-    <ClInclude Include="BTransform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dxerr.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BTexture.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BTransform.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RTexPlane.h">
+      <Filter>Header Files\RenderObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="BSampler.h">
+      <Filter>Header Files\BindObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,10 +211,10 @@
     <FxCompile Include="SimplePixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="ColorIndexVS.hlsl">
+    <FxCompile Include="PlaneTexVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="ColorIndexPS.hlsl">
+    <FxCompile Include="PlaneTexPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

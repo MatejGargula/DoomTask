@@ -2,6 +2,7 @@
 #include "dxerr.h"
 #include "DTWindow.h"
 #include "DTThrowMacros.h"
+#include "DTConfig.h"
 #include "Vertex.h"
 
 //TODO: Delete later
@@ -180,8 +181,8 @@ DTGraphics::DTGraphics(HWND hWnd)
 
 	// configure viewport
 	D3D11_VIEWPORT vp = {};
-	vp.Width = 800.0f;
-	vp.Height = 600.0f;
+	vp.Width = SCREEN_WIDTH;
+	vp.Height = SCREEN_HEIGHT;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
