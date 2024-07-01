@@ -79,4 +79,5 @@ public:
 	DTWindow& operator=(const DTWindow&) = delete;
 	static std::optional<int> ProcessMessages();
 	DTGraphics& Gfx();
+	void SetTitle(const std::string& title);
 };

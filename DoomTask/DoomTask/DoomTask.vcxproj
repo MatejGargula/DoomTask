@@ -115,6 +115,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <FxCompile>
+      <ShaderModel>4.1</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -137,23 +140,50 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <FxCompile>
+      <ShaderModel>4.1</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BIndexBuffer.cpp" />
+    <ClCompile Include="BInputLayout.cpp" />
+    <ClCompile Include="BPixelShader.cpp" />
+    <ClCompile Include="BTopology.cpp" />
+    <ClCompile Include="BTransform.cpp" />
+    <ClCompile Include="BVertexBuffer.cpp" />
+    <ClCompile Include="BVertexShader.cpp" />
     <ClCompile Include="DTApp.cpp" />
+    <ClCompile Include="DTBindObjectBase.cpp" />
     <ClCompile Include="DTException.cpp" />
     <ClCompile Include="DTGraphics.cpp" />
+    <ClCompile Include="DTSceneObject.cpp" />
     <ClCompile Include="DTWindow.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
+    <ClCompile Include="IndexedTriangleList.h" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="DTRenderObjectBase.cpp" />
+    <ClCompile Include="RBox.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BConstantBuffer.h" />
+    <ClInclude Include="BIndexBuffer.h" />
+    <ClInclude Include="BInputLayout.h" />
+    <ClInclude Include="BPixelShader.h" />
+    <ClInclude Include="BTopology.h" />
+    <ClInclude Include="BTransform.h" />
+    <ClInclude Include="BVertexBuffer.h" />
+    <ClInclude Include="BVertexShader.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="DTApp.h" />
+    <ClInclude Include="DTBindObjectBase.h" />
+    <ClInclude Include="DTConfig.h" />
     <ClInclude Include="DTException.h" />
     <ClInclude Include="DTGraphics.h" />
+    <ClInclude Include="DTSceneObject.h" />
     <ClInclude Include="DTThrowMacros.h" />
     <ClInclude Include="DTWindow.h" />
     <ClInclude Include="DTWnds.h" />
@@ -161,9 +191,24 @@
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="DTRenderObjectBase.h" />
+    <ClInclude Include="RBox.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="ColorIndexPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="ColorIndexVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="SimplePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

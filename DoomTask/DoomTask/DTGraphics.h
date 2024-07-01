@@ -3,23 +3,34 @@
 #include "DTWnds.h"
 #include "DTException.h"
 #include "DXGIInfoManager.h"
+#include "DTBindObjectBase.h"
+#include "DTConfig.h"
 
-#include <wrl.h>
 #include <d3d11.h>
-#include <string>
+#include <wrl.h>
 #include <vector>
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
+#include <memory>
+#include <random>
+
 
 //TODO: Add docs
 class DTGraphics
 {
+	friend class DTBindObjectBase;
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>  pSwap;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
 
 	DxgiInfoManager infoManager;
+
+	DirectX::XMMATRIX projection;
+
 public:
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 #pragma region Nested Classes
 
 	class Exception : public DTException
@@ -70,6 +81,10 @@ public:
 
 	void EndFrame();
 	void ClearBuffer(float r, float g, float b) noexcept;
-	void DrawTestTriangle();
+	void DrawIndexed(UINT count) noexcept;
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
+	
+	void DrawTestTriangle(float angle, float x, float z);
 };
 

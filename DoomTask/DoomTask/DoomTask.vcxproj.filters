@@ -16,6 +16,18 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{ffe358de-719d-4c15-bd46-4f3d4f2fb247}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\BindObjects">
+      <UniqueIdentifier>{7889ae88-ed78-4864-9dd5-e7bcb1451abd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\RenderObjects">
+      <UniqueIdentifier>{d2052a33-fafc-44c3-8e79-8cebf1a4acb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BindObjects">
+      <UniqueIdentifier>{63cadadd-8884-410e-b713-44b8f4abfaf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RenderObjects">
+      <UniqueIdentifier>{4c42203f-f787-4ebf-8abc-2719ed692e39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -48,6 +60,42 @@
     <ClCompile Include="DxgiInfoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DTRenderObjectBase.cpp">
+      <Filter>Source Files\RenderObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="DTBindObjectBase.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BIndexBuffer.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BInputLayout.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BPixelShader.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BVertexShader.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="DTSceneObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BTopology.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BVertexBuffer.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RBox.cpp">
+      <Filter>Source Files\RenderObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexedTriangleList.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -74,14 +122,59 @@
     <ClInclude Include="DTGraphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dxerr.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DTThrowMacros.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DTRenderObjectBase.h">
+      <Filter>Header Files\RenderObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DTBindObjectBase.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BIndexBuffer.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BInputLayout.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DTConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BPixelShader.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BVertexShader.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DTSceneObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BConstantBuffer.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BTopology.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BVertexBuffer.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RBox.h">
+      <Filter>Header Files\RenderObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dxerr.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +182,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="SimplePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ColorIndexVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ColorIndexPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

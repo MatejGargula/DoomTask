@@ -82,7 +82,7 @@ DTWindow::DTWindowClass::DTWindowClass() noexcept
 	wc.hInstance = GetInstance();
 	wc.hIcon = nullptr;
 	wc.hCursor = nullptr;
-	wc.hbrBackground = nullptr;
+	//wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = GetName();
 	wc.hIconSm = nullptr;
@@ -113,7 +113,7 @@ DTWindow::DTWindow(int w, int h, const char* name) noexcept
 	height(h)
 {
 	// Set Rect of the window
-	RECT wr;
+	RECT wr = {};
 	wr.left = 100;
 	wr.right = w + wr.left;
 	wr.top = 100;
@@ -173,6 +173,14 @@ DTGraphics& DTWindow::Gfx()
 		throw NoGfxException(__LINE__, __FILE__);
 
 	return *gfx;
+}
+
+void DTWindow::SetTitle(const std::string& title)
+{
+	if (SetWindowText(hWnd, title.c_str()) == 0)
+	{
+		throw DTWND_LAST_EXCEPT();
+	}
 }
 
 LRESULT DTWindow::HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
