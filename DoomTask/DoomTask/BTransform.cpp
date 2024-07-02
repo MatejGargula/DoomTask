@@ -2,7 +2,7 @@
 
 void BTransform::updateTransformMatrix()
 {
-	modelMat = DirectX::XMMatrixRotationRollPitchYaw(rotX, rotY, rotZ) * DirectX::XMMatrixTranslation(x, y, z);
+	modelMat = DirectX::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z) * DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 }
 
 BTransform::Transforms BTransform::getTransformMatrices(DTGraphics &gfx)
@@ -20,12 +20,8 @@ BTransform::Transforms BTransform::getTransformMatrices(DTGraphics &gfx)
 
 BTransform::BTransform(DTGraphics& gfx)
 	:
-	x(0.0f),
-	y(0.0f),
-	z(0.0f),
-	rotX(0.0f),
-	rotY(0.0f),
-	rotZ(0.0f)
+	position(0.0f, 0.0f, 0.0f),
+	rotation(0.0f, 0.0f, 0.0f)
 {
 	if (!pVcbuf)
 	{
@@ -37,12 +33,8 @@ BTransform::BTransform(DTGraphics& gfx)
 
 BTransform::BTransform(DTGraphics& gfx, float xPos, float yPos, float zPos, float xRot, float yRot, float zRot)
 	:
-	x(xPos),
-	y(yPos),
-	z(zPos),
-	rotX(xRot),
-	rotY(yRot),
-	rotZ(zRot)
+	position(xPos, yPos, zPos),
+	rotation(xRot, yRot, zRot)
 {
 	if (!pVcbuf)
 	{
@@ -60,27 +52,27 @@ void BTransform::Bind(DTGraphics& gfx) noexcept
 
 void BTransform::Translate(float xPos, float yPos, float zPos) noexcept
 {
-	x += xPos;
-	y += yPos;
-	z += zPos;
+	position.x += xPos;
+	position.y += yPos;
+	position.z += zPos;
 
 	updateTransformMatrix();
 }
 
 void BTransform::SetPosition(float xPos, float yPos, float zPos) noexcept
 {
-	x = xPos;
-	y = yPos;
-	z = zPos;
+	position.x = xPos;
+	position.y = yPos;
+	position.z = zPos;
 
 	updateTransformMatrix();
 }
 
 void BTransform::SetRotation(float xRot, float yRot, float zRot) noexcept
 {
-	rotX = yRot;
-	rotY = xRot;
-	rotZ = zRot;
+	rotation.x = xRot;
+	rotation.y = yRot;
+	rotation.z = zRot;
 
 	updateTransformMatrix();
 }

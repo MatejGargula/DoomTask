@@ -3,16 +3,19 @@
 #include <cassert>
 #include <typeinfo>
 
-void DTRenderObjectBase::Render(DTGraphics& gfx, BTransform &transform) const noexcept
+void DTRenderObjectBase::Render(DTGraphics& gfx) const noexcept
 {
 	for (auto& b : binds)
-	{
 		b->Bind(gfx);
-	}
-
-	transform.Bind(gfx);
 
 	gfx.DrawIndexed(pIndexBuffer->GetCount());
+
+}
+
+void DTRenderObjectBase::Render(DTGraphics& gfx, BTransform &transform) const noexcept
+{
+	transform.Bind(gfx);
+	Render(gfx);
 }
 
 void DTRenderObjectBase::AddBind(std::unique_ptr<DTBindObjectBase> bind) noexcept

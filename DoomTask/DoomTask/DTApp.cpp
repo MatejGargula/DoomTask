@@ -7,6 +7,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+float angle = 0;
+
 DTApp::DTApp()
 	:
 	window(SCREEN_WIDTH,SCREEN_HEIGHT, WINDOW_NAME)
@@ -15,20 +17,20 @@ DTApp::DTApp()
 	std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
 	std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
 
-	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(),plane);
-	so1->transform.SetPosition(0.0f, 0.0f,0.0f);
-	sceneObjects.push_back(std::move(so1));
-
-	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), box);
-	so2->transform.SetPosition(0.0f, 0.0f, 0.0f);
-	sceneObjects.push_back(std::move(so2));
-
-	std::unique_ptr<DTSceneObject> so3 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
-	so3->transform.SetPosition(0.0f, 0.0f, 0.0f);
-	sceneObjects.push_back(std::move(so3));
+	//std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(),plane);
+	//so1->transform.SetPosition(0.0f, 0.0f,4.0f);
+	//sceneObjects.push_back(std::move(so1));
+	//
+	//std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), box);
+	//so2->transform.SetPosition(0.0f, 0.0f, 4.0f);
+	//sceneObjects.push_back(std::move(so2));
+	//
+	//std::unique_ptr<DTSceneObject> so3 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
+	//so3->transform.SetPosition(0.0f, 0.0f, 4.0f);
+	//sceneObjects.push_back(std::move(so3));
 
 	std::unique_ptr<DTSceneObject> so4 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
-	so4->transform.SetPosition(0.0f, 0.0f, 0.0f);
+	so4->transform.SetPosition(0.0f, 0.0f, 4.0f);
 	sceneObjects.push_back(std::move(so4));
 
 	window.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
@@ -51,24 +53,29 @@ void DTApp::RunFrame()
 {
 	const float dt = timer.Mark();
 
+
 	//window.SetTitle("Time: " + std::to_string(dt));	
 	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
 	
-	float angle = window.mouse.GetPosX() / ((float)SCREEN_WIDTH/4);
-	float x = window.mouse.GetPosX() / ((float)SCREEN_WIDTH/2) - 1.0f;
-	float y = -window.mouse.GetPosY() / ((float)SCREEN_HEIGHT/2) + 1.0f;
+	angle += dt/1.2f;
+	if (angle > (3.14f * 2))
+		angle -= (3.14f * 2);
 
-	sceneObjects[0]->transform.SetPosition(x, y, 4.0f);
+	//float angle = window.mouse.GetPosX() / ((float)SCREEN_WIDTH/4);
+	//float x = window.mouse.GetPosX() / ((float)SCREEN_WIDTH/2) - 1.0f;
+	//float y = -window.mouse.GetPosY() / ((float)SCREEN_HEIGHT/2) + 1.0f;
+
+	//sceneObjects[0]->transform.SetPosition(x, y, 4.0f);
 	sceneObjects[0]->transform.SetRotation(angle, 0.0f, angle);
 	
-	sceneObjects[1]->transform.SetPosition(-x, -y, 4.0f);
-	sceneObjects[1]->transform.SetRotation(-angle, 0.0f, -angle);
-
-	sceneObjects[2]->transform.SetPosition(x, -y, 4.0f);
-	sceneObjects[2]->transform.SetRotation(angle, 0.0f, -angle);
-
-	sceneObjects[3]->transform.SetPosition(-x, y, 4.0f);
-	sceneObjects[3]->transform.SetRotation(-angle, 0.0f, angle);
+	//sceneObjects[1]->transform.SetPosition(-x, -y, 4.0f);
+	//sceneObjects[1]->transform.SetRotation(-angle, 0.0f, -angle);
+	//
+	//sceneObjects[2]->transform.SetPosition(x, -y, 4.0f);
+	//sceneObjects[2]->transform.SetRotation(angle, 0.0f, -angle);
+	//
+	//sceneObjects[3]->transform.SetPosition(-x, y, 4.0f);
+	//sceneObjects[3]->transform.SetRotation(-angle, 0.0f, angle);
 
 	for (auto& so : sceneObjects)
 	{

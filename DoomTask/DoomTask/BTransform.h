@@ -15,13 +15,16 @@ private:
 		DirectX::XMMATRIX modelViewProj;
 	};
 
-	float x;
-	float y;
-	float z;
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT3 rotation;
 
-	float rotX;
-	float rotY;
-	float rotZ;
+	//float x;
+	//float y;
+	//float z;
+	//
+	//float rotX;
+	//float rotY;
+	//float rotZ;
 
 	std::unique_ptr<BVertexConstantBuffer<Transforms>> pVcbuf;
 
