@@ -111,6 +111,9 @@
     <ClCompile Include="RMesh.cpp">
       <Filter>Source Files\RenderObjects</Filter>
     </ClCompile>
+    <ClCompile Include="LPointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="RMesh.h">
       <Filter>Header Files\RenderObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LPointLight.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

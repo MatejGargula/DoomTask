@@ -2,7 +2,20 @@
 
 void BTransform::updateTransformMatrix()
 {
-	transformMat = DirectX::XMMatrixRotationRollPitchYaw(rotX, rotY, rotZ) * DirectX::XMMatrixTranslation(x, y, z);
+	modelMat = DirectX::XMMatrixRotationRollPitchYaw(rotX, rotY, rotZ) * DirectX::XMMatrixTranslation(x, y, z);
+}
+
+BTransform::Transforms BTransform::getTransformMatrices(DTGraphics &gfx)
+{
+	//TODO: Add View matrix from camera 
+	const DirectX::XMMATRIX modelViewMat = modelMat * gfx.GetProjection();
+	const DirectX::XMMATRIX modelViewProjectionMat = modelMat * gfx.GetProjection();
+
+	return {
+		DirectX::XMMatrixTranspose(modelMat),
+		DirectX::XMMatrixTranspose(modelViewMat),
+		DirectX::XMMatrixTranspose(modelViewProjectionMat)
+	};
 }
 
 BTransform::BTransform(DTGraphics& gfx)
@@ -16,7 +29,7 @@ BTransform::BTransform(DTGraphics& gfx)
 {
 	if (!pVcbuf)
 	{
-		pVcbuf = std::make_unique<BVertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
+		pVcbuf = std::make_unique<BVertexConstantBuffer<Transforms>>(gfx);
 	}
 
 	updateTransformMatrix();
@@ -33,7 +46,7 @@ BTransform::BTransform(DTGraphics& gfx, float xPos, float yPos, float zPos, floa
 {
 	if (!pVcbuf)
 	{
-		pVcbuf = std::make_unique<BVertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
+		pVcbuf = std::make_unique<BVertexConstantBuffer<BTransform::Transforms>>(gfx);
 	}
 
 	updateTransformMatrix();
@@ -41,9 +54,7 @@ BTransform::BTransform(DTGraphics& gfx, float xPos, float yPos, float zPos, floa
 
 void BTransform::Bind(DTGraphics& gfx) noexcept
 {
-	DirectX::XMMATRIX mat = DirectX::XMMatrixTranspose(transformMat * gfx.GetProjection());
-
-	pVcbuf->Update(gfx, mat);
+	pVcbuf->Update(gfx, getTransformMatrices(gfx));
 	pVcbuf->Bind(gfx);
 }
 
@@ -76,6 +87,6 @@ void BTransform::SetRotation(float xRot, float yRot, float zRot) noexcept
 
 DirectX::XMMATRIX BTransform::GetTransormMat() noexcept
 {
-	return transformMat;
+	return modelMat;
 }
 

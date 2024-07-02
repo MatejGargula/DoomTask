@@ -19,7 +19,7 @@ DTApp::DTApp()
 	so1->transform.SetPosition(0.0f, 0.0f,0.0f);
 	sceneObjects.push_back(std::move(so1));
 
-	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), plane);
+	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), box);
 	so2->transform.SetPosition(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(so2));
 
@@ -52,11 +52,11 @@ void DTApp::RunFrame()
 	const float dt = timer.Mark();
 
 	//window.SetTitle("Time: " + std::to_string(dt));	
-	window.Gfx().ClearBuffer(dt, dt, 1.0f);
+	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
 	
-	float angle = window.mouse.GetPosX() / 300.0f;
-	float x = window.mouse.GetPosX() / 400.0f - 1.0f;
-	float y = -window.mouse.GetPosY() / 300.0f + 1.0f;
+	float angle = window.mouse.GetPosX() / ((float)SCREEN_WIDTH/4);
+	float x = window.mouse.GetPosX() / ((float)SCREEN_WIDTH/2) - 1.0f;
+	float y = -window.mouse.GetPosY() / ((float)SCREEN_HEIGHT/2) + 1.0f;
 
 	sceneObjects[0]->transform.SetPosition(x, y, 4.0f);
 	sceneObjects[0]->transform.SetRotation(angle, 0.0f, angle);

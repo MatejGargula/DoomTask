@@ -6,8 +6,15 @@
 #include <DirectXMath.h>
 
 class BTransform : public DTBindObjectBase
-{
+{	
 private:
+	struct Transforms
+	{
+		DirectX::XMMATRIX model;
+		DirectX::XMMATRIX modelView;
+		DirectX::XMMATRIX modelViewProj;
+	};
+
 	float x;
 	float y;
 	float z;
@@ -16,11 +23,12 @@ private:
 	float rotY;
 	float rotZ;
 
-	std::unique_ptr<BVertexConstantBuffer<DirectX::XMMATRIX>> pVcbuf;
+	std::unique_ptr<BVertexConstantBuffer<Transforms>> pVcbuf;
 
-	DirectX::XMMATRIX transformMat;
-
+	DirectX::XMMATRIX modelMat;
+	
 	void updateTransformMatrix();
+	Transforms getTransformMatrices(DTGraphics& gfx);
 
 public:
 
