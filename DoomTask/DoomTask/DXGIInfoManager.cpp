@@ -4,7 +4,7 @@
 #include <memory>
 #include "DTThrowMacros.h"
 
-#pragma comment(lib, "dxguid.lib")
+//#pragma comment(lib, "dxguid.lib")
 
 
 DxgiInfoManager::DxgiInfoManager()

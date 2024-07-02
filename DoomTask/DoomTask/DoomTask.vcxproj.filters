@@ -108,6 +108,9 @@
     <ClCompile Include="BSampler.cpp">
       <Filter>Source Files\BindObjects</Filter>
     </ClCompile>
+    <ClCompile Include="RMesh.cpp">
+      <Filter>Source Files\RenderObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -203,6 +206,9 @@
     <ClInclude Include="BSampler.h">
       <Filter>Header Files\BindObjects</Filter>
     </ClInclude>
+    <ClInclude Include="RMesh.h">
+      <Filter>Header Files\RenderObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimpleVertexShader.hlsl">
@@ -215,6 +221,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PlaneTexPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SimplePhongVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SimplePhongPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

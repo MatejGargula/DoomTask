@@ -1,16 +1,19 @@
 #include "DTApp.h"
 #include "RBox.h"
 #include "RTexPlane.h"
+#include "RMesh.h"
 
-#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 DTApp::DTApp()
 	:
 	window(SCREEN_WIDTH,SCREEN_HEIGHT, WINDOW_NAME)
 {
-
 	std::shared_ptr<DTRenderObjectBase> box = std::make_shared<RBox>(window.Gfx());
 	std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
+	std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
 
 	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(),plane);
 	so1->transform.SetPosition(0.0f, 0.0f,0.0f);
@@ -20,11 +23,11 @@ DTApp::DTApp()
 	so2->transform.SetPosition(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(so2));
 
-	std::unique_ptr<DTSceneObject> so3 = std::make_unique<DTSceneObject>(window.Gfx(), box);
+	std::unique_ptr<DTSceneObject> so3 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
 	so3->transform.SetPosition(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(so3));
 
-	std::unique_ptr<DTSceneObject> so4 = std::make_unique<DTSceneObject>(window.Gfx(), box);
+	std::unique_ptr<DTSceneObject> so4 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
 	so4->transform.SetPosition(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(so4));
 

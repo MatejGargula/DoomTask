@@ -20,8 +20,8 @@
 #include <DirectXMath.h>
 #include <vector>
 
-#pragma comment(lib, "d3d11.lib") // for linking of D3D11
-#pragma comment(lib, "D3DCompiler.lib") // Probably remove later
+//#pragma comment(lib, "d3d11.lib") // for linking of D3D11
+//#pragma comment(lib, "D3DCompiler.lib") // Probably remove later
 
 #pragma region Nested Classes
 
@@ -133,22 +133,22 @@ std::string DTGraphics::InfoException::GetErrorInfo() const noexcept
 
 DTGraphics::DTGraphics(HWND hWnd)
 {
-	DXGI_SWAP_CHAIN_DESC scDesc = {};
-	scDesc.BufferDesc.Width = 0;
-	scDesc.BufferDesc.Height = 0;
-	scDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	scDesc.BufferDesc.RefreshRate.Numerator = 0;
-	scDesc.BufferDesc.RefreshRate.Denominator = 0;
-	scDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	scDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	scDesc.SampleDesc.Count = 2;
-	scDesc.SampleDesc.Quality = 0;
-	scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	scDesc.BufferCount = 1;
-	scDesc.OutputWindow = hWnd;
-	scDesc.Windowed = TRUE;
-	scDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	scDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	DXGI_SWAP_CHAIN_DESC sd = {};
+	sd.BufferDesc.Width = 0;
+	sd.BufferDesc.Height = 0;
+	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 0;
+	sd.BufferDesc.RefreshRate.Denominator = 0;
+	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.BufferCount = 1;
+	sd.OutputWindow = hWnd;
+	sd.Windowed = TRUE;
+	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	HRESULT hr;
 
@@ -160,7 +160,7 @@ DTGraphics::DTGraphics(HWND hWnd)
 		nullptr,
 		0,
 		D3D11_SDK_VERSION,
-		&scDesc,
+		&sd,
 		&pSwap,
 		&pDevice,
 		nullptr,
@@ -176,8 +176,42 @@ DTGraphics::DTGraphics(HWND hWnd)
 		&pTarget
 	));
 
+	// create depth stensil state
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	dsDesc.DepthEnable = TRUE;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
+	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
+
+	// bind depth state
+	pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
+
+	// create depth stensil texture
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
+	D3D11_TEXTURE2D_DESC descDepth = {};
+	descDepth.Width = SCREEN_WIDTH;
+	descDepth.Height = SCREEN_HEIGHT;
+	descDepth.MipLevels = 1u;
+	descDepth.ArraySize = 1u;
+	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	descDepth.SampleDesc.Count = 1u;
+	descDepth.SampleDesc.Quality = 0u;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
+
+	// create view of depth stensil texture
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0u;
+	GFX_THROW_INFO(pDevice->CreateDepthStencilView(
+		pDepthStencil.Get(), &descDSV, &pDSV
+	));
+
 	// Render target
-	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), nullptr);
+	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
 
 	// configure viewport
 	D3D11_VIEWPORT vp = {};
@@ -211,6 +245,7 @@ void DTGraphics::ClearBuffer(float r, float g, float b) noexcept
 {
 	const float color[] = { r,g,b,1.0f };
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
+	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
 void DTGraphics::DrawTestTriangle(float angle, float x, float z)
