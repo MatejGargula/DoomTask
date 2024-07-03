@@ -18,7 +18,6 @@ private:
 
 public:
 	DTCamera();
-	DTCamera(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 fwd, DirectX::XMFLOAT3 up);
 	DTCamera(
 		DirectX::XMFLOAT3 pos,
 		DirectX::XMFLOAT3 fwd,
@@ -39,7 +38,6 @@ public:
 	DirectX::XMFLOAT3 GetPosition();
 	DirectX::XMFLOAT3 GetForward();
 	DirectX::XMFLOAT3 GetUp();
-
 
 	void SetPosition(float x, float y, float z);
 	void SetForward(float x, float y, float z);

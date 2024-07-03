@@ -166,6 +166,7 @@
     <ClCompile Include="BVertexShader.cpp" />
     <ClCompile Include="DTApp.cpp" />
     <ClCompile Include="DTBindObjectBase.cpp" />
+    <ClCompile Include="DTCamera.cpp" />
     <ClCompile Include="DTException.cpp" />
     <ClCompile Include="DTGraphics.cpp" />
     <ClCompile Include="DTSceneObject.cpp" />
@@ -197,9 +198,11 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DTApp.h" />
     <ClInclude Include="DTBindObjectBase.h" />
+    <ClInclude Include="DTCamera.h" />
     <ClInclude Include="DTConfig.h" />
     <ClInclude Include="DTException.h" />
     <ClInclude Include="DTGraphics.h" />
+    <ClInclude Include="DTMath.h" />
     <ClInclude Include="DTSceneObject.h" />
     <ClInclude Include="DTThrowMacros.h" />
     <ClInclude Include="DTWindow.h" />
@@ -219,6 +222,14 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="PhongPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="PlaneTexPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

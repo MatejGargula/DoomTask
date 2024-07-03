@@ -22,7 +22,9 @@ public:
 		memcpy(msr.pData, &consts, sizeof(consts));
 		GetContext(gfx)->Unmap(pConstantBuffer.Get(), 0u);
 	}
-	BConstantBuffer(DTGraphics& gfx, const C& consts)
+	BConstantBuffer(DTGraphics& gfx, const C& consts, UINT slot)
+		:
+		slotNum(slot)
 	{
 		// Needed for macro throws
 		DxgiInfoManager& infoManager = GetInfoManager(gfx);
@@ -40,7 +42,9 @@ public:
 		csd.pSysMem = &consts;
 		GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&cbd, &csd, &pConstantBuffer));
 	}
-	BConstantBuffer(DTGraphics& gfx)
+	BConstantBuffer(DTGraphics& gfx, UINT slot)
+		:
+		slotNum(slot)
 	{
 		// Needed for macro throws
 		DxgiInfoManager& infoManager = GetInfoManager(gfx);
@@ -57,6 +61,7 @@ public:
 	}
 protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
+	UINT slotNum;
 };
 
 
@@ -64,12 +69,13 @@ template<typename C>
 class BVertexConstantBuffer : public BConstantBuffer<C>
 {
 	using BConstantBuffer<C>::pConstantBuffer;
+	using BConstantBuffer<C>::slotNum;
 	using DTBindObjectBase::GetContext;
 public:
 	using BConstantBuffer<C>::BConstantBuffer;
 	void Bind(DTGraphics& gfx) noexcept override
 	{
-		GetContext(gfx)->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+		GetContext(gfx)->VSSetConstantBuffers(slotNum, 1u, pConstantBuffer.GetAddressOf());
 	}
 };
 
@@ -77,11 +83,12 @@ template<typename C>
 class BPixelConstantBuffer : public BConstantBuffer<C>
 {
 	using BConstantBuffer<C>::pConstantBuffer;
+	using BConstantBuffer<C>::slotNum;
 	using DTBindObjectBase::GetContext;
 public:
 	using BConstantBuffer<C>::BConstantBuffer;
 	void Bind(DTGraphics& gfx) noexcept override
 	{
-		GetContext(gfx)->PSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+		GetContext(gfx)->PSSetConstantBuffers(slotNum, 1u, pConstantBuffer.GetAddressOf());
 	}
 };

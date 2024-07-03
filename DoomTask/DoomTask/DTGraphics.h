@@ -15,6 +15,7 @@
 #include <memory>
 #include <random>
 
+class DTCamera;
 
 //TODO: Add docs
 class DTGraphics

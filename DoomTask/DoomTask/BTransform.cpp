@@ -25,7 +25,12 @@ BTransform::BTransform(DTGraphics& gfx)
 {
 	if (!pVcbuf)
 	{
-		pVcbuf = std::make_unique<BVertexConstantBuffer<Transforms>>(gfx);
+		pVcbuf = std::make_unique<BVertexConstantBuffer<Transforms>>(gfx, 0u);
+	}
+
+	if (!pPcbuf)
+	{
+		pPcbuf = std::make_unique<BPixelConstantBuffer<CbuffCameraData>>(gfx, 0u);
 	}
 
 	updateTransformMatrix();
@@ -38,7 +43,12 @@ BTransform::BTransform(DTGraphics& gfx, float xPos, float yPos, float zPos, floa
 {
 	if (!pVcbuf)
 	{
-		pVcbuf = std::make_unique<BVertexConstantBuffer<BTransform::Transforms>>(gfx);
+		pVcbuf = std::make_unique<BVertexConstantBuffer<BTransform::Transforms>>(gfx, 0u);
+	}
+
+	if (!pPcbuf)
+	{
+		pPcbuf = std::make_unique<BPixelConstantBuffer<CbuffCameraData>>(gfx, 0u);
 	}
 
 	updateTransformMatrix();
@@ -46,8 +56,18 @@ BTransform::BTransform(DTGraphics& gfx, float xPos, float yPos, float zPos, floa
 
 void BTransform::Bind(DTGraphics& gfx) noexcept
 {
-	pVcbuf->Update(gfx, getTransformMatrices(gfx));
+	Transforms dataVert = getTransformMatrices(gfx);
+
+	pVcbuf->Update(gfx, dataVert);
 	pVcbuf->Bind(gfx);
+
+	CbuffCameraData dataPix;
+//	dataPix.pos = 
+	DirectX::XMFLOAT3 camPos = gfx.camera->GetPosition();
+	DirectX::XMStoreFloat3(&dataPix.pos, DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&camPos), dataVert.modelView));
+
+	pPcbuf->Update(gfx, dataPix);
+	pPcbuf->Bind(gfx);
 }
 
 void BTransform::Translate(float xPos, float yPos, float zPos) noexcept

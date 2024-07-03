@@ -8,6 +8,12 @@
 class BTransform : public DTBindObjectBase
 {	
 private:
+	struct CbuffCameraData
+	{
+		DirectX::XMFLOAT3 pos;
+		float pad;
+	};
+
 	struct Transforms
 	{
 		DirectX::XMMATRIX model;
@@ -27,6 +33,7 @@ private:
 	//float rotZ;
 
 	std::unique_ptr<BVertexConstantBuffer<Transforms>> pVcbuf;
+	std::unique_ptr<BPixelConstantBuffer<CbuffCameraData>> pPcbuf;
 
 	DirectX::XMMATRIX modelMat;
 	

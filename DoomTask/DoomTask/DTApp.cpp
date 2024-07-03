@@ -12,9 +12,10 @@ float angle = 0;
 
 DTApp::DTApp()
 	:
-	window(SCREEN_WIDTH,SCREEN_HEIGHT, WINDOW_NAME)
+	window(SCREEN_WIDTH,SCREEN_HEIGHT, WINDOW_NAME),
+	light(window.Gfx())
 {
-
+	//light = LPointLight(window.Gfx());
 	InitScene();
 
 	window.DisableCursor();
@@ -30,7 +31,8 @@ void DTApp::InitScene()
 	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
 	so1->transform.SetPosition(0.0f, 0.0f, 4.0f);
 	sceneObjects.push_back(std::move(so1));
-
+	
+	light.EnableLightRenderObject(box);
 }
 
 int DTApp::Run()
@@ -56,7 +58,7 @@ void DTApp::RunFrame()
 	if (angle > (TWO_PI))
 		angle -= (TWO_PI);
 
-	sceneObjects[0]->transform.SetRotation(angle, 0.0f, angle);
+	//sceneObjects[0]->transform.SetRotation(angle, 0.0f, angle);
 
 	HandleMouseInput(dt);
 	HandleKeyboardInput(dt);
@@ -99,11 +101,23 @@ void DTApp::HandleKeyboardInput(float dt)
 	}
 
 	window.Gfx().camera->UpdateMovement(dt, movingForward, movingBackward, movingLeft, movingRight);
+	std::ostringstream oss;
+	oss << "X: " << window.Gfx().camera->GetPosition().x
+		<< " Y: " << window.Gfx().camera->GetPosition().y
+		<< " Z: " << window.Gfx().camera->GetPosition().z;
+	
+	std::string positionStr = oss.str();
+	//window.SetTitle(positionStr);
 }
 
 void DTApp::HandleRendering(float dt)
 {
 	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
+
+	//light.SetPosition(window.Gfx().camera->GetPosition());
+	light.Bind(window.Gfx());
+	
+	light.Render(window.Gfx());
 
 	for (auto& so : sceneObjects)
 	{

@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include "DTConfig.h"
 #include "DTSceneObject.h"
+#include "LPointLight.h"
 
 //TODO: Add docs
 class DTApp
@@ -12,6 +13,8 @@ private:
 	DTWindow window;
 	Timer timer;
 	std::vector<std::unique_ptr<class DTSceneObject>> sceneObjects;
+	LPointLight light;
+	
 	static constexpr size_t nDrawables = 180;
 
 	void RunFrame();

@@ -49,7 +49,8 @@ RMesh::RMesh(DTGraphics& gfx, std::string path)
 	auto pvs = std::make_unique<BVertexShader>(gfx, L"SimplePhongVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
-	AddBind(std::make_unique<BPixelShader>(gfx, L"SimplePhongPS.cso"));
+	//AddBind(std::make_unique<BPixelShader>(gfx, L"SimplePhongPS.cso"));
+	AddBind(std::make_unique<BPixelShader>(gfx, L"PhongPS.cso"));
 
 	//Input layout
 	const std::vector<D3D11_INPUT_ELEMENT_DESC>  ied =

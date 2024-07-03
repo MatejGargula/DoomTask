@@ -1,25 +1,20 @@
 #include "DTCamera.h"
 #include "DTMath.h"
 
-DTCamera::DTCamera()
+DTCamera::DTCamera(/*DTGraphics& gfx*/)
 	:
 	position(0.0f,0.0f,0.0f),
 	forward(0.0f, 0.0f, 0.0f),
 	up(0.0f, 0.0f, 0.0f)
 {
+	//if (!pPcbuf)
+	//{
+	//	pPcbuf = std::make_unique<BPixelConstantBuffer<CbuffCameraData>>(gfx, 0u);
+	//}
 	projection = DirectX::XMMatrixIdentity();
 }
 
-DTCamera::DTCamera(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 fwd, DirectX::XMFLOAT3 up)
-	:
-	position(pos),
-	forward(fwd),
-	up(up)
-{
-	projection = DirectX::XMMatrixIdentity();
-}
-
-DTCamera::DTCamera(
+DTCamera::DTCamera(/*DTGraphics& gfx,*/
 	DirectX::XMFLOAT3 pos,
 	DirectX::XMFLOAT3 fwd,
 	DirectX::XMFLOAT3 up,
@@ -32,6 +27,10 @@ DTCamera::DTCamera(
 	forward(fwd),
 	up(up)
 {
+	//if (!pPcbuf)
+	//{
+	//	pPcbuf = std::make_unique<BPixelConstantBuffer<CbuffCameraData>>(gfx, 0u);
+	//}
 	SetProjectionMatrix(fov, aspectRatio, nearZ, farZ);
 }
 
@@ -138,4 +137,13 @@ void DTCamera::SetUp(float x, float y, float z)
 	up.y = y;
 	up.z = z;
 }
+
+//void DTCamera::Bind(DTGraphics& gfx)
+//{
+//	CbuffCameraData data = {};
+//	data.pos = position;
+//
+//	pPcbuf->Update(gfx, data);
+//	pPcbuf->Bind(gfx);
+//}
 
