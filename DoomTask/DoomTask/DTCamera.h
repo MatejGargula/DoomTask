@@ -13,7 +13,7 @@ private:
 
 	float yaw = 0.0f;
 	float pitch = 0.0f;
-	float mouseSensitivity = 1.0f; 
+	float mouseSensitivity = 0.001f; 
 	float moveSpeed = 5.0f; 
 
 public:
@@ -29,7 +29,8 @@ public:
 		const float& farZ
 	);
 
-	void UpdateCamera(float deltaTime, float mouseX, float mouseY, bool moveForward, bool moveBackward, bool moveLeft, bool moveRight);
+	void Rotate(float mouseX, float mouseY);
+	void UpdateMovement(float deltaTime, bool moveForward, bool moveBackward, bool moveLeft, bool moveRight);
 
 	void SetProjectionMatrix(const float& fov, const float& aspectRatio, const float& nearZ, const float& farZ);
 	DirectX::XMMATRIX GetProjectionMatrix();

@@ -144,6 +144,18 @@ DTWindow::DTWindow(int w, int h, const char* name) noexcept
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
 	gfx = std::make_unique<DTGraphics>(hWnd);
+
+	// Register mouse raw input
+	RAWINPUTDEVICE rid = {};
+	rid.usUsagePage = 0x01;
+	rid.usUsage = 0x02;
+	rid.dwFlags = 0;
+	rid.hwndTarget = nullptr;
+
+	if (RegisterRawInputDevices(&rid, 1, sizeof(rid)) == FALSE)
+	{
+		throw DTWND_LAST_EXCEPT();
+	}
 }
 
 DTWindow::~DTWindow()
@@ -173,6 +185,42 @@ DTGraphics& DTWindow::Gfx()
 		throw NoGfxException(__LINE__, __FILE__);
 
 	return *gfx;
+}
+
+void DTWindow::EnableCursor()
+{
+	cursorEnabled = true;
+	showCursor();
+}
+
+void DTWindow::DisableCursor()
+{
+	cursorEnabled = false;
+	hideCursor();
+}
+
+void DTWindow::hideCursor()
+{
+	while (::ShowCursor(FALSE) >= 0);
+
+}
+
+void DTWindow::showCursor()
+{
+	while (::ShowCursor(TRUE) < 0);
+}
+
+void DTWindow::ConfineCursor()
+{
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	ClipCursor(&rect);
+}
+
+void DTWindow::FreeCursor()
+{
+	ClipCursor(nullptr);
 }
 
 void DTWindow::SetTitle(const std::string& title)
@@ -224,7 +272,43 @@ LRESULT DTWindow::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 		keyboard.ClearState();
 		break;
 	}
+	
+	case WM_INPUT:
+	{
+		UINT size = 0;
+		if (GetRawInputData(
+			reinterpret_cast<HRAWINPUT>(lParam),
+			RID_INPUT,
+			nullptr,
+			&size,
+			sizeof(RAWINPUTHEADER)
+		) == -1) // Error detection
+		{
+			break;
+		}
+
+		rawBuffer.resize(size);
+
+		if (GetRawInputData(
+			reinterpret_cast<HRAWINPUT>(lParam),
+			RID_INPUT,
+			rawBuffer.data(),
+			&size,
+			sizeof(RAWINPUTHEADER)
+		) != size) // Actually getting raw input
+		{
+			break;
+		}
 		
+		const RAWINPUT& ri = reinterpret_cast<const RAWINPUT&>(*rawBuffer.data());
+		if (ri.header.dwType == RIM_TYPEMOUSE && (ri.data.mouse.lLastX != 0) || ri.data.mouse.lLastY != 0)
+		{
+			mouse.OnRawDelta(ri.data.mouse.lLastX, ri.data.mouse.lLastY);
+		}
+
+		break;
+	}
+
 	case WM_KEYDOWN:
 	{
 		if (!(lParam & 0x40000000) || keyboard.AutorepeatIsEnabled()) 

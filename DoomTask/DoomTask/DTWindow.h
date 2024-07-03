@@ -2,6 +2,7 @@
 
 #include <optional>
 #include <memory>
+#include <vector>
 
 #include "DTWnds.h"
 #include "DTGraphics.h"
@@ -17,6 +18,13 @@ private:
 	int height;
 	HWND hWnd;
 	std::unique_ptr<DTGraphics> gfx;
+
+	bool cursorEnabled = false;
+
+	std::vector<char> rawBuffer;
+
+	void hideCursor();
+	void showCursor();
 
 #pragma region Nested Classes
 public:
@@ -80,4 +88,9 @@ public:
 	static std::optional<int> ProcessMessages();
 	DTGraphics& Gfx();
 	void SetTitle(const std::string& title);
+
+	void EnableCursor();
+	void DisableCursor();
+	void ConfineCursor();
+	void FreeCursor();
 };

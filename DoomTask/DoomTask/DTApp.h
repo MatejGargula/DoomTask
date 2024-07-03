@@ -16,6 +16,12 @@ private:
 
 	void RunFrame();
 
+	void InitScene();
+
+	void HandleMouseInput(float dt);
+	void HandleKeyboardInput(float dt);
+	void HandleRendering(float dt);
+
 public:
 	DTApp();
 	int Run();
