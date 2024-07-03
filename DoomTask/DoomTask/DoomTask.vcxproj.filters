@@ -117,6 +117,9 @@
     <ClCompile Include="DTCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BMaterial.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="DTMath.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BMaterial.h">
+      <Filter>Header Files\BindObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

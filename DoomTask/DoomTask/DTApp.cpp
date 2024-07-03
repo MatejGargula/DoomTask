@@ -3,6 +3,7 @@
 #include "RTexPlane.h"
 #include "RMesh.h"
 #include "DTMath.h"
+#include "BMaterial.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -28,10 +29,27 @@ void DTApp::InitScene()
 	std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
 	std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
 
-	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne);
+	std::shared_ptr<BMaterial> defaultMat = std::make_shared<BMaterial>(window.Gfx(),
+		DirectX::XMFLOAT3(0.2f, 0.2f , 0.2f ),
+		DirectX::XMFLOAT3(0.6f, 0.6f , 0.6f ),
+		DirectX::XMFLOAT4(1.0f, 1.0f , 1.0f , 1.0f)
+	);
+
+	std::shared_ptr<BMaterial> defaultMat2 = std::make_shared<BMaterial>(window.Gfx(),
+		DirectX::XMFLOAT3(0.4f, 0.4f, 0.4f),
+		DirectX::XMFLOAT3(0.6f, 0.1f, 0.9f),
+		DirectX::XMFLOAT4(1.0f, 1.0f, 0.5f, 4.0f)
+	);
+
+	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat);
 	so1->transform.SetPosition(0.0f, 0.0f, 4.0f);
 	sceneObjects.push_back(std::move(so1));
 	
+	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat2);
+	so2->transform.SetPosition(3.0f, 1.0f, 2.0f);
+	sceneObjects.push_back(std::move(so2));
+
+
 	light.EnableLightRenderObject(box);
 }
 

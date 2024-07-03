@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="BIndexBuffer.cpp" />
     <ClCompile Include="BInputLayout.cpp" />
+    <ClCompile Include="BMaterial.cpp" />
     <ClCompile Include="BPixelShader.cpp" />
     <ClCompile Include="BSampler.cpp" />
     <ClCompile Include="BTexture.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="BConstantBuffer.h" />
     <ClInclude Include="BIndexBuffer.h" />
     <ClInclude Include="BInputLayout.h" />
+    <ClInclude Include="BMaterial.h" />
     <ClInclude Include="BPixelShader.h" />
     <ClInclude Include="BSampler.h" />
     <ClInclude Include="BTexture.h" />

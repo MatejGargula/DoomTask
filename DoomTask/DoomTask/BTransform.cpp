@@ -61,7 +61,7 @@ void BTransform::Bind(DTGraphics& gfx) noexcept
 	pVcbuf->Update(gfx, dataVert);
 	pVcbuf->Bind(gfx);
 
-	CbuffCameraData dataPix;
+	CbuffCameraData dataPix = {};
 //	dataPix.pos = 
 	DirectX::XMFLOAT3 camPos = gfx.camera->GetPosition();
 	DirectX::XMStoreFloat3(&dataPix.pos, DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&camPos), dataVert.modelView));

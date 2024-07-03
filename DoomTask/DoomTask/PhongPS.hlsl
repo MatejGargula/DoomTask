@@ -13,14 +13,21 @@ cbuffer CLightBuf : register(b1)
     float pad;
 };
 
+cbuffer CMaterial : register(b2)
+{
+    float3 ambientMat;
+    float3 diffuseMat;
+    float4 specMat;
+};
+
 //TODO: Move to Constant buffer
 // Material 
-float3 diffuseMat = float3(0.4f, 0.2f, 0.09f);
-float3 specularMat = float3(0.8f, 0.8f, 0.8f);
-float shininess = 1;
 
 float4 main(float3 normal : Normal, float3 worldPostion : Position) : SV_TARGET
 {
+    float3 specularMat = (float3) specMat;
+    float shininess = specMat.a;
+
 	// ambient
     float3 ambientColor = lightAmbient * diffuseMat;
   	
