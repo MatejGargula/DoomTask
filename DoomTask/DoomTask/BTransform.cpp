@@ -8,8 +8,8 @@ void BTransform::updateTransformMatrix()
 BTransform::Transforms BTransform::getTransformMatrices(DTGraphics &gfx)
 {
 	//TODO: Add View matrix from camera 
-	const DirectX::XMMATRIX modelViewMat = modelMat * gfx.GetProjection();
-	const DirectX::XMMATRIX modelViewProjectionMat = modelMat * gfx.GetProjection();
+	const DirectX::XMMATRIX modelViewMat = modelMat * gfx.camera->GetViewMatrix();
+	const DirectX::XMMATRIX modelViewProjectionMat = modelViewMat * gfx.camera->GetProjectionMatrix();
 
 	return {
 		DirectX::XMMatrixTranspose(modelMat),

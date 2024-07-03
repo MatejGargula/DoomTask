@@ -5,6 +5,7 @@
 #include "DXGIInfoManager.h"
 #include "DTBindObjectBase.h"
 #include "DTConfig.h"
+#include "DTCamera.h"
 
 #include <d3d11.h>
 #include <wrl.h>
@@ -22,6 +23,7 @@ class DTGraphics
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain>  pSwap;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
 
@@ -30,7 +32,20 @@ private:
 	DirectX::XMMATRIX projection;
 
 public:
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
+	std::unique_ptr<DTCamera> camera;
+
+	DTGraphics(HWND hWnd);
+	DTGraphics(const DTGraphics&) = delete;
+	DTGraphics& operator=(const DTGraphics&) = delete;
+
+	void EndFrame();
+	void ClearBuffer(float r, float g, float b) noexcept;
+	void DrawIndexed(UINT count) noexcept;
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
+	
+	void DrawTestTriangle(float angle, float x, float z);
+
 #pragma region Nested Classes
 
 	class Exception : public DTException
@@ -52,7 +67,7 @@ public:
 		HRESULT hr;
 		std::string info;
 	};
-	
+
 	class DeviceRemovedException : public HrException
 	{
 		using HrException::HrException;
@@ -74,17 +89,5 @@ public:
 	};
 
 #pragma endregion
-
-	DTGraphics(HWND hWnd);
-	DTGraphics(const DTGraphics&) = delete;
-	DTGraphics& operator=(const DTGraphics&) = delete;
-
-	void EndFrame();
-	void ClearBuffer(float r, float g, float b) noexcept;
-	void DrawIndexed(UINT count) noexcept;
-	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
-	DirectX::XMMATRIX GetProjection() const noexcept;
-	
-	void DrawTestTriangle(float angle, float x, float z);
 };
 

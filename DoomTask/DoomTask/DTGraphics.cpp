@@ -222,6 +222,25 @@ DTGraphics::DTGraphics(HWND hWnd)
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
 	pContext->RSSetViewports(1u, &vp);
+
+	DirectX::XMFLOAT3 pos = { 0.0f, 0.0f , 0.0f };
+	DirectX::XMFLOAT3 forward = { 0.0f, 0.0f , 1.0f };
+	DirectX::XMFLOAT3 up = { 0.0f, 1.0f , 0.0f };
+
+	float fov = 45.0f;
+	float aspectRatio = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
+	float nearZ = 0.1f;
+	float farZ = 50.0f;
+
+	camera = std::make_unique<DTCamera>(
+		pos,
+		forward,
+		up,
+		fov,
+		aspectRatio,
+		nearZ,
+		farZ
+	);
 }
 
 void DTGraphics::EndFrame()
