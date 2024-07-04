@@ -20,9 +20,6 @@ cbuffer CMaterial : register(b2)
     float4 specMat;
 };
 
-//TODO: Move to Constant buffer
-// Material 
-
 float4 main(float3 normal : Normal, float3 worldPostion : Position) : SV_TARGET
 {
     float3 specularMat = (float3) specMat;

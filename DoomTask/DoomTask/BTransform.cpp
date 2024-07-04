@@ -90,9 +90,9 @@ void BTransform::SetPosition(float xPos, float yPos, float zPos) noexcept
 
 void BTransform::SetRotation(float xRot, float yRot, float zRot) noexcept
 {
-	rotation.x = xRot;
-	rotation.y = yRot;
-	rotation.z = zRot;
+	rotation.x = DirectX::XMConvertToRadians(xRot);
+	rotation.y = DirectX::XMConvertToRadians(yRot);
+	rotation.z = DirectX::XMConvertToRadians(zRot);
 
 	updateTransformMatrix();
 }

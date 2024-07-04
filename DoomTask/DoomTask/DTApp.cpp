@@ -43,10 +43,12 @@ void DTApp::InitScene()
 
 	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat);
 	so1->transform.SetPosition(0.0f, 0.0f, 4.0f);
+	so1->transform.SetRotation(0.0f, 180, 0.0f);
 	sceneObjects.push_back(std::move(so1));
 	
 	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat2);
 	so2->transform.SetPosition(3.0f, 1.0f, 2.0f);
+	so2->transform.SetRotation(0.0f, 180, 0.0f);
 	sceneObjects.push_back(std::move(so2));
 
 
@@ -72,11 +74,11 @@ void DTApp::RunFrame()
 	//float x = window.mouse.GetPosX() / ((float)SCREEN_WIDTH) - 1.0f;
 	//float y = -window.mouse.GetPosY() / ((float)SCREEN_HEIGHT) + 1.0f;
 	
-	angle += dt/1.2f;
-	if (angle > (TWO_PI))
-		angle -= (TWO_PI);
+	angle += dt/1.2f * 180;
+	if (angle > 360)
+		angle -= 360;
 
-	//sceneObjects[0]->transform.SetRotation(angle, 0.0f, angle);
+	sceneObjects[0]->transform.SetRotation(0.0f, angle, 0.0f);
 
 	HandleMouseInput(dt);
 	HandleKeyboardInput(dt);

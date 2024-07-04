@@ -120,6 +120,12 @@
     <ClCompile Include="BMaterial.cpp">
       <Filter>Source Files\BindObjects</Filter>
     </ClCompile>
+    <ClCompile Include="RenderTargetTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthStencilTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -229,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="BMaterial.h">
       <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTargetTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilTexture.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

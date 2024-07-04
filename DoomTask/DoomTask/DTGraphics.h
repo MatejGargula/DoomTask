@@ -20,6 +20,8 @@ class DTCamera;
 //TODO: Add docs
 class DTGraphics
 {
+	friend class DepthStencilTexture;
+	friend class RenderTargetTexture;
 	friend class DTBindObjectBase;
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
@@ -30,7 +32,9 @@ private:
 
 	DxgiInfoManager infoManager;
 
-	DirectX::XMMATRIX projection;
+	// TODO: Add a vector to hold postProcess passes
+
+	// TODO: add deffered render passes with G-Buffer
 
 public:
 	std::unique_ptr<DTCamera> camera;
@@ -46,6 +50,10 @@ public:
 	DirectX::XMMATRIX GetProjection() const noexcept;
 	
 	void DrawTestTriangle(float angle, float x, float z);
+
+	// TODO: add postprocessing render passes
+	void RenderPostprocess();
+
 
 #pragma region Nested Classes
 
