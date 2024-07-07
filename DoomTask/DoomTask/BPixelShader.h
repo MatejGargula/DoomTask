@@ -2,6 +2,8 @@
 
 #include "DTBindObjectBase.h"
 
+class DTGraphics;
+
 class BPixelShader : public DTBindObjectBase
 {
 public:

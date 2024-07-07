@@ -6,6 +6,7 @@
 #include "DTBindObjectBase.h"
 #include "DTConfig.h"
 #include "DTCamera.h"
+#include "RenderTargetTexture.h"
 
 #include <d3d11.h>
 #include <wrl.h>
@@ -16,10 +17,13 @@
 #include <random>
 
 class DTCamera;
+class DepthStencilTexture;
+class RenderTargetTexture;
 
 //TODO: Add docs
 class DTGraphics
 {
+	friend class PostProcessPass;
 	friend class DepthStencilTexture;
 	friend class RenderTargetTexture;
 	friend class DTBindObjectBase;
@@ -32,7 +36,13 @@ private:
 
 	DxgiInfoManager infoManager;
 
+	bool postProcessingEnabled;
+
+	std::shared_ptr<RenderTargetTexture> mainSceneRenderTexture;
+	std::shared_ptr<DepthStencilTexture> mainDepthRenderTexture;
+	
 	// TODO: Add a vector to hold postProcess passes
+	//std::vector<PostProcessPass> postProcesses;
 
 	// TODO: add deffered render passes with G-Buffer
 
@@ -51,10 +61,25 @@ public:
 	
 	void DrawTestTriangle(float angle, float x, float z);
 
-	// TODO: add postprocessing render passes
-	void RenderPostprocess();
+	/// <summary>
+	/// Switches the render target from back buffer to a main renderTexture.
+	/// </summary>
+	void EnablePostProcessing();
+	
+	/// <summary>
+	/// Switches the render target from back main render texture to the back buffer.
+	/// </summary>
+	void DisablePostProcessing();
 
+	/// <summary>
+	/// Returns a pointer to the main render texture if post processing is enabled.
+	/// </summary>
+	std::shared_ptr<RenderTargetTexture> GetMainRenderTexture();
 
+	/// <summary>
+	/// Getter for is processed enabled
+	/// </summary>
+	bool isPostprocessingEnabled();
 #pragma region Nested Classes
 
 	class Exception : public DTException

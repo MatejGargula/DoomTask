@@ -1,6 +1,10 @@
 #pragma once
 
 #include "DTGraphics.h"
+#include <d3d11.h>
+#include <wrl.h>
+
+class DTGraphics;
 
 class DepthStencilTexture
 {

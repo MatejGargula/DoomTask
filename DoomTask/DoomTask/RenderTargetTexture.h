@@ -3,6 +3,9 @@
 #include "DTGraphics.h"
 #include "DepthStencilTexture.h"
 
+class DTGraphics;
+class DepthStencilTexture;
+
 // TODO: add docs 
 class RenderTargetTexture
 {
@@ -16,6 +19,7 @@ public:
 	void BindAsTexture(DTGraphics& gfx, UINT slot) const noexcept;
 	void BindAsRenderTarget(DTGraphics& gfx) const noexcept;
 	void BindAsRenderTarget(DTGraphics& gfx, const DepthStencilTexture& depthStencilTex) const noexcept;
+	void ClearRenderTarget(DTGraphics& gfx, const float color[3]) noexcept;
 
 protected:
 	static ID3D11DeviceContext* GetContext(DTGraphics& gfx) noexcept;

@@ -21,6 +21,15 @@ DTApp::DTApp()
 
 	window.DisableCursor();
 	window.ConfineCursor();
+
+	//window.Gfx().EnablePostProcessing();
+	//
+	//// Create post processes;
+	postProcesses.emplace_back( 
+		window.Gfx(),
+		L"GrayscalePS.cso",
+		L"DefaultPostProcessVS.cso",
+		window.Gfx().GetMainRenderTexture());
 }
 
 void DTApp::InitScene()
@@ -80,13 +89,17 @@ void DTApp::RunFrame()
 
 	sceneObjects[0]->transform.SetRotation(0.0f, angle, 0.0f);
 
+	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
+
 	HandleMouseInput(dt);
 	HandleKeyboardInput(dt);
 	HandleRendering(dt);
+
+	PostProcessFrame();
+
 	window.Gfx().EndFrame();
+	
 }
-
-
 
 void DTApp::HandleMouseInput(float dt)
 {
@@ -132,8 +145,7 @@ void DTApp::HandleKeyboardInput(float dt)
 
 void DTApp::HandleRendering(float dt)
 {
-	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
-
+	window.Gfx().EnablePostProcessing();
 	//light.SetPosition(window.Gfx().camera->GetPosition());
 	light.Bind(window.Gfx());
 	
@@ -143,5 +155,15 @@ void DTApp::HandleRendering(float dt)
 	{
 		so->Update(dt);
 		so->Render(window.Gfx());
+	}
+}
+
+void DTApp::PostProcessFrame()
+{
+	window.Gfx().DisablePostProcessing();
+	//TODO:: handle post processes;
+	for (unsigned int i = 0; i < postProcesses.size(); i++)
+	{
+		postProcesses[i].Render(window.Gfx());
 	}
 }

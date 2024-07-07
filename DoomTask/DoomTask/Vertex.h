@@ -2,6 +2,11 @@
 
 #include <DirectXMath.h>
 
+struct VertexPos2D 
+{
+	DirectX::XMFLOAT2 pos;
+};
+
 struct VertexPos
 {
 	DirectX::XMFLOAT3 pos;

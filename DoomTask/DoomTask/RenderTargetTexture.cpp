@@ -60,6 +60,11 @@ void RenderTargetTexture::BindAsRenderTarget(DTGraphics& gfx, const DepthStencil
 	GetContext(gfx)->OMSetRenderTargets(1, pRenderTargetView.GetAddressOf(), depthStencilTex.pDepthStencilView.Get());
 }
 
+void RenderTargetTexture::ClearRenderTarget(DTGraphics& gfx, const float color[3]) noexcept
+{
+	GetContext(gfx)->ClearRenderTargetView(pRenderTargetView.Get(), color);
+}
+
 ID3D11DeviceContext* RenderTargetTexture::GetContext(DTGraphics& gfx) noexcept
 {
 	return gfx.pContext.Get();

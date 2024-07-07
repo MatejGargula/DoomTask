@@ -5,6 +5,7 @@
 #include "DTConfig.h"
 #include "DTSceneObject.h"
 #include "LPointLight.h"
+#include "PostProcessPass.h"
 
 //TODO: Add docs
 class DTApp
@@ -15,9 +16,12 @@ private:
 	std::vector<std::unique_ptr<class DTSceneObject>> sceneObjects;
 	LPointLight light;
 	
+	std::vector<PostProcessPass> postProcesses;
+
 	static constexpr size_t nDrawables = 180;
 
 	void RunFrame();
+	void PostProcessFrame();
 
 	void InitScene();
 
@@ -28,5 +32,7 @@ private:
 public:
 	DTApp();
 	int Run();
+
+	
 };
 

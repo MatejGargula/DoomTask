@@ -20,9 +20,6 @@
 #include <DirectXMath.h>
 #include <vector>
 
-//#pragma comment(lib, "d3d11.lib") // for linking of D3D11
-//#pragma comment(lib, "D3DCompiler.lib") // Probably remove later
-
 #pragma region Nested Classes
 
 DTGraphics::HrException::HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs) noexcept
@@ -132,6 +129,10 @@ std::string DTGraphics::InfoException::GetErrorInfo() const noexcept
 #pragma endregion
 
 DTGraphics::DTGraphics(HWND hWnd)
+	:
+	postProcessingEnabled(false),
+	mainDepthRenderTexture(nullptr),
+	mainSceneRenderTexture(nullptr)
 {
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferDesc.Width = 0;
@@ -176,6 +177,9 @@ DTGraphics::DTGraphics(HWND hWnd)
 		&pTarget
 	));
 
+	mainDepthRenderTexture = std::make_shared<DepthStencilTexture>(*this, SCREEN_WIDTH, SCREEN_HEIGHT);
+	mainSceneRenderTexture = std::make_shared<RenderTargetTexture>(*this, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	// create depth stensil state
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
 	dsDesc.DepthEnable = TRUE;
@@ -183,10 +187,10 @@ DTGraphics::DTGraphics(HWND hWnd)
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
 	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
-
-	// bind depth state
+	
+	//// bind depth state
 	pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
-
+	
 	// create depth stensil texture
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
@@ -200,7 +204,7 @@ DTGraphics::DTGraphics(HWND hWnd)
 	descDepth.Usage = D3D11_USAGE_DEFAULT;
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
-
+	
 	// create view of depth stensil texture
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
 	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
@@ -209,9 +213,10 @@ DTGraphics::DTGraphics(HWND hWnd)
 	GFX_THROW_INFO(pDevice->CreateDepthStencilView(
 		pDepthStencil.Get(), &descDSV, &pDSV
 	));
-
+	
 	// Render target
-	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+	DisablePostProcessing();
+	//EnablePostProcessing();
 
 	// configure viewport
 	D3D11_VIEWPORT vp = {};
@@ -227,7 +232,7 @@ DTGraphics::DTGraphics(HWND hWnd)
 	DirectX::XMFLOAT3 forward = { 0.0f, 0.0f , 1.0f };
 	DirectX::XMFLOAT3 up = { 0.0f, 1.0f , 0.0f };
 
-	float fov = 45.0f;
+	float fov = 60.0f;
 	float aspectRatio = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
 	float nearZ = 0.1f;
 	float farZ = 50.0f;
@@ -263,6 +268,13 @@ void DTGraphics::EndFrame()
 void DTGraphics::ClearBuffer(float r, float g, float b) noexcept
 {
 	const float color[] = { r,g,b,1.0f };
+
+	//if (postProcessingEnabled)
+	//{
+	mainSceneRenderTexture->ClearRenderTarget(*this, color);
+	mainDepthRenderTexture->Clear(*this);
+	//return;
+	//}
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
 	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
@@ -380,12 +392,33 @@ void DTGraphics::DrawIndexed(UINT count) noexcept
 	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
 }
 
-void DTGraphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
+void DTGraphics::EnablePostProcessing()
 {
-	projection = proj;
+	if (postProcessingEnabled)
+		return;
+
+	postProcessingEnabled = true;
+
+	mainSceneRenderTexture->BindAsRenderTarget(*this);
+	mainDepthRenderTexture->BindAsDepthBuffer(*this);
+
+	//mainSceneRenderTexture->BindAsRenderTarget(*this, *mainDepthRenderTexture.get());
+
 }
 
-DirectX::XMMATRIX DTGraphics::GetProjection() const noexcept
+void DTGraphics::DisablePostProcessing()
 {
-	return projection;
+	postProcessingEnabled = false;
+
+	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+}
+
+std::shared_ptr<RenderTargetTexture> DTGraphics::GetMainRenderTexture()
+{
+	return mainSceneRenderTexture;
+}
+
+bool DTGraphics::isPostprocessingEnabled()
+{
+	return postProcessingEnabled;
 }
