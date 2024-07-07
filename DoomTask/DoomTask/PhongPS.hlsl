@@ -53,5 +53,6 @@ float4 main(float3 normal : Normal, float3 worldPostion : Position) : SV_TARGET
     specularColor *= attenuation;
         
     float3 result = saturate(ambientColor + diffuseColor + specularColor);
+    
     return float4(result, 1.0);
 }

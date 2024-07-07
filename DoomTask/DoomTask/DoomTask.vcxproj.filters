@@ -129,6 +129,9 @@
     <ClCompile Include="PostProcessPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RMultiMesh.cpp">
+      <Filter>Source Files\RenderObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="PostProcessPass.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMultiMesh.h">
+      <Filter>Header Files\RenderObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

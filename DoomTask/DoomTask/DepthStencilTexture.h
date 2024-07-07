@@ -6,6 +6,9 @@
 
 class DTGraphics;
 
+/// <summary>
+/// TODO: Add docs
+/// </summary>
 class DepthStencilTexture
 {
 	friend class RenderTargetTexture;

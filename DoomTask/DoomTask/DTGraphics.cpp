@@ -191,28 +191,28 @@ DTGraphics::DTGraphics(HWND hWnd)
 	//// bind depth state
 	pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
 	
-	// create depth stensil texture
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
-	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = SCREEN_WIDTH;
-	descDepth.Height = SCREEN_HEIGHT;
-	descDepth.MipLevels = 1u;
-	descDepth.ArraySize = 1u;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-	descDepth.SampleDesc.Count = 1u;
-	descDepth.SampleDesc.Quality = 0u;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
-	
-	// create view of depth stensil texture
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	descDSV.Texture2D.MipSlice = 0u;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilView(
-		pDepthStencil.Get(), &descDSV, &pDSV
-	));
+	//// create depth stensil texture
+	//Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
+	//D3D11_TEXTURE2D_DESC descDepth = {};
+	//descDepth.Width = SCREEN_WIDTH;
+	//descDepth.Height = SCREEN_HEIGHT;
+	//descDepth.MipLevels = 1u;
+	//descDepth.ArraySize = 1u;
+	//descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	//descDepth.SampleDesc.Count = 1u;
+	//descDepth.SampleDesc.Quality = 0u;
+	//descDepth.Usage = D3D11_USAGE_DEFAULT;
+	//descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	//GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
+
+	//// create view of depth stensil texture
+	//D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	//descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//descDSV.Texture2D.MipSlice = 0u;
+	//GFX_THROW_INFO(pDevice->CreateDepthStencilView(
+	//	pDepthStencil.Get(), &descDSV, &pDSV
+	//));
 	
 	// Render target
 	DisablePostProcessing();
@@ -235,7 +235,7 @@ DTGraphics::DTGraphics(HWND hWnd)
 	float fov = 60.0f;
 	float aspectRatio = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
 	float nearZ = 0.1f;
-	float farZ = 50.0f;
+	float farZ = 1000.0f;
 
 	camera = std::make_unique<DTCamera>(
 		pos,
@@ -400,9 +400,7 @@ void DTGraphics::EnablePostProcessing()
 	postProcessingEnabled = true;
 
 	mainSceneRenderTexture->BindAsRenderTarget(*this);
-	mainDepthRenderTexture->BindAsDepthBuffer(*this);
-
-	//mainSceneRenderTexture->BindAsRenderTarget(*this, *mainDepthRenderTexture.get());
+	mainSceneRenderTexture->BindAsRenderTarget(*this, *mainDepthRenderTexture.get());
 
 }
 
