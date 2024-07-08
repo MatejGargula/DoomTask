@@ -12,10 +12,12 @@ private:
 	UINT height;
 	UINT channels;
 
+	UINT slot;
+
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;
 public:
-	BTexture(DTGraphics& gfx, std::string path, DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM);
+	BTexture(DTGraphics& gfx, std::string path, UINT slotNum = 0, DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM);
 	void Bind(DTGraphics& gfx) noexcept override;
 };
 

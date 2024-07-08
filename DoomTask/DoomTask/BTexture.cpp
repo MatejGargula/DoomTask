@@ -2,7 +2,9 @@
 #include "BTexture.h"
 #include "stb_image.h"
 
-BTexture::BTexture(DTGraphics& gfx, std::string path, DXGI_FORMAT format)
+BTexture::BTexture(DTGraphics& gfx, std::string path, UINT slotNum, DXGI_FORMAT format)
+	:
+	slot(slotNum)
 {
 	// Needed for macro throws
 	DxgiInfoManager& infoManager = GetInfoManager(gfx);
@@ -18,7 +20,7 @@ BTexture::BTexture(DTGraphics& gfx, std::string path, DXGI_FORMAT format)
 		&h,
 		&ch, imageDesiredChannels));
 
-	assert(ImageData);
+	assert("Image has to exist!" && ImageData);
 
 	width = w;
 	height = h;
@@ -57,5 +59,5 @@ BTexture::BTexture(DTGraphics& gfx, std::string path, DXGI_FORMAT format)
 
 void BTexture::Bind(DTGraphics& gfx) noexcept
 {
-	GetContext(gfx)->PSSetShaderResources(0u, 1u, pTextureView.GetAddressOf());
+	GetContext(gfx)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
 }

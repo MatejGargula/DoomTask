@@ -2,6 +2,7 @@
 #include "RBox.h"
 #include "RTexPlane.h"
 #include "RMesh.h"
+#include "RMultiMesh.h"
 #include "DTMath.h"
 #include "BMaterial.h"
 
@@ -35,11 +36,10 @@ DTApp::DTApp()
 void DTApp::InitScene()
 {
 	std::shared_ptr<DTRenderObjectBase> box = std::make_shared<RBox>(window.Gfx());
-	std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
-	std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
-	std::shared_ptr<DTRenderObjectBase> teapot = std::make_shared<RMesh>(window.Gfx(), "Models\\teapot.obj");
-	std::shared_ptr<DTRenderObjectBase> doomLevel = std::make_shared<RMesh>(window.Gfx(), "Models\\DoomLevel.obj");
-
+	//std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
+	//std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
+	//std::shared_ptr<DTRenderObjectBase> teapot = std::make_shared<RMesh>(window.Gfx(), "Models\\teapot.obj");
+	std::shared_ptr<DTRenderObjectBase> doomLevel = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\DoomLevel.obj");
 
 	std::shared_ptr<BMaterial> defaultMat = std::make_shared<BMaterial>(window.Gfx(),
 		DirectX::XMFLOAT3(0.2f, 0.2f , 0.2f ),
@@ -54,24 +54,24 @@ void DTApp::InitScene()
 	);
 
 	std::unique_ptr<DTSceneObject> level = std::make_unique<DTSceneObject>(window.Gfx(), doomLevel, defaultMat);
-	level->transform.SetPosition(0.0f, 0.0f, 0.0f);
+	level->transform.SetPosition(0.0f, -3.0f, 0.0f);
 	level->transform.SetRotation(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(level));
 
-	std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat);
-	so1->transform.SetPosition(0.0f, 0.0f, 4.0f);
-	so1->transform.SetRotation(0.0f, 180, 0.0f);
-	sceneObjects.push_back(std::move(so1));
-	
-	std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat2);
-	so2->transform.SetPosition(3.0f, 1.0f, 2.0f);
-	so2->transform.SetRotation(0.0f, 180, 0.0f);
-	sceneObjects.push_back(std::move(so2));
-
-	std::unique_ptr<DTSceneObject> so3 = std::make_unique<DTSceneObject>(window.Gfx(), teapot, defaultMat2);
-	so3->transform.SetPosition(2.0f, 0.0f, 12.0f);
-	so3->transform.SetRotation(-90.0f, 0.0f, 0.0f);
-	sceneObjects.push_back(std::move(so3));
+	//std::unique_ptr<DTSceneObject> so1 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat);
+	//so1->transform.SetPosition(0.0f, 0.0f, 4.0f);
+	//so1->transform.SetRotation(0.0f, 180, 0.0f);
+	//sceneObjects.push_back(std::move(so1));
+	//
+	//std::unique_ptr<DTSceneObject> so2 = std::make_unique<DTSceneObject>(window.Gfx(), suzanne, defaultMat2);
+	//so2->transform.SetPosition(3.0f, 1.0f, 2.0f);
+	//so2->transform.SetRotation(0.0f, 180, 0.0f);
+	//sceneObjects.push_back(std::move(so2));
+	//
+	//std::unique_ptr<DTSceneObject> so3 = std::make_unique<DTSceneObject>(window.Gfx(), teapot, defaultMat2);
+	//so3->transform.SetPosition(2.0f, 0.0f, 12.0f);
+	//so3->transform.SetRotation(-90.0f, 0.0f, 0.0f);
+	//sceneObjects.push_back(std::move(so3));
 
 
 	light.EnableLightRenderObject(box);
@@ -100,7 +100,7 @@ void DTApp::RunFrame()
 	if (angle > 360)
 		angle -= 360;
 
-	sceneObjects[1]->transform.SetRotation(0.0f, angle, 0.0f);
+	//sceneObjects[1]->transform.SetRotation(0.0f, angle, 0.0f);
 
 	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
 

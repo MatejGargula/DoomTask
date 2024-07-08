@@ -17,7 +17,7 @@ void DTSceneObject::Render(DTGraphics& gfx)
 {
 	if (renderObject != nullptr && material != nullptr)
 	{
-		material->Bind(gfx);
+		//material->Bind(gfx);
 		renderObject->Render(gfx, transform);
 	}
 }

@@ -26,6 +26,6 @@ public:
 	/// <param name="gfx"></param>
 	/// <param name="mesh"> Assimp structure for holding mesh data. </param>
 	/// <param name="materials"> Pointer to assimp structure holding material data. </param>
-	RMesh(DTGraphics& gfx, aiMesh& mesh /*, const aiMaterial* const* materials*/);
+	RMesh(DTGraphics& gfx, aiMesh& mesh , const aiMaterial* const* materials);
 };
 

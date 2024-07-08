@@ -273,10 +273,10 @@ void DTGraphics::ClearBuffer(float r, float g, float b) noexcept
 	//{
 	mainSceneRenderTexture->ClearRenderTarget(*this, color);
 	mainDepthRenderTexture->Clear(*this);
-	//return;
+	//	return;
 	//}
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+	//pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
 void DTGraphics::DrawTestTriangle(float angle, float x, float z)

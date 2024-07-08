@@ -14,9 +14,8 @@ class DTRenderObjectBase
 public:
 	DTRenderObjectBase() = default;
 	DTRenderObjectBase(const DTRenderObjectBase&) = delete;
-	void Render(DTGraphics& gfx) const noexcept;
-	void Render(DTGraphics& gfx, BTransform &transform) const noexcept;
-	//virtual void Update(float dt) noexcept = 0; // TODO: Maybe delete? 
+	virtual void Render(DTGraphics& gfx) const noexcept;
+	virtual void Render(DTGraphics& gfx, BTransform &transform) const noexcept;
 	void AddBind(std::unique_ptr<DTBindObjectBase> bind) noexcept;
 	void AddIndexBuffer(std::unique_ptr<class BIndexBuffer> ibuf) noexcept;
 	virtual ~DTRenderObjectBase() = default;
