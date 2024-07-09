@@ -13,7 +13,7 @@ RenderTargetTexture::RenderTargetTexture(DTGraphics& gfx, UINT width, UINT heigh
 	td.Height = height;
 	td.MipLevels = 1;
 	td.ArraySize = 1;
-	td.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	td.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;//DXGI_FORMAT_B8G8R8A8_UNORM;
 	td.SampleDesc.Count = 1;
 	td.SampleDesc.Quality = 0;
 	td.Usage = D3D11_USAGE_DEFAULT;

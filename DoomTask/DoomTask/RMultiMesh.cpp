@@ -38,10 +38,10 @@ void RMultiMesh::Render(DTGraphics& gfx) const noexcept
 
 void RMultiMesh::Render(DTGraphics& gfx, BTransform& transform) const noexcept
 {
-	if (VS != nullptr)
+	if (VS != nullptr && shadersEnabled)
 		VS->Bind(gfx);
 	
-	if (PS != nullptr)
+	if (PS != nullptr && shadersEnabled)
 		PS->Bind(gfx);
 
 	for (unsigned int i = 0; i < meshes.size(); i++)
