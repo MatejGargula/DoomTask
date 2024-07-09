@@ -4,6 +4,7 @@
 
 class LPointLight
 {
+	friend class LLightGroup;
 private:
 	struct PointLightCBuf
 	{
@@ -33,14 +34,14 @@ private:
 	std::unique_ptr<BPixelConstantBuffer<PointLightCBuf>> pPcbuf;
 
 public:
-	LPointLight(DTGraphics& gfx,
-		DirectX::XMFLOAT3 pos = {0.0f, 0.0f ,0.0f }, 
+	//LPointLight();
+	LPointLight(DirectX::XMFLOAT3 pos = {0.0f, 0.0f ,0.0f }, 
 		DirectX::XMFLOAT3 amb = { 0.2f, 0.2f ,0.2f },
 		DirectX::XMFLOAT3 diff = { 1.0f, 1.0f ,1.0f },
 		DirectX::XMFLOAT3 spec = { 0.4f, 0.1f ,0.1f },
 		float constant = 1.0f,
-		float linear = 0.35f,
-		float quadratic = 0.44f
+		float linear = 0.045f,
+		float quadratic = 0.0075f
 	);
 	void Bind(DTGraphics& gfx) noexcept;
 	void EnableLightRenderObject(std::shared_ptr<DTRenderObjectBase> mesh);

@@ -132,6 +132,9 @@
     <ClCompile Include="RMultiMesh.cpp">
       <Filter>Source Files\RenderObjects</Filter>
     </ClCompile>
+    <ClCompile Include="LLightGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="RMultiMesh.h">
       <Filter>Header Files\RenderObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LLightGroup.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

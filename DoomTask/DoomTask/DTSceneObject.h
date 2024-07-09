@@ -15,6 +15,7 @@ public:
 	BTransform transform;
 
 	DTSceneObject(DTGraphics& gfx);
+	DTSceneObject(DTGraphics& gfx, std::shared_ptr<DTRenderObjectBase> ro);
 	DTSceneObject(DTGraphics& gfx, std::shared_ptr<DTRenderObjectBase> ro, std::shared_ptr<BMaterial> mat);
 
 	void Render(DTGraphics& gfx);

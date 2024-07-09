@@ -159,6 +159,7 @@
     <ClCompile Include="BInputLayout.cpp" />
     <ClCompile Include="BMaterial.cpp" />
     <ClCompile Include="BPixelShader.cpp" />
+    <ClCompile Include="LLightGroup.cpp" />
     <ClCompile Include="PostProcessPass.cpp" />
     <ClCompile Include="BSampler.cpp" />
     <ClCompile Include="BTexture.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="BInputLayout.h" />
     <ClInclude Include="BMaterial.h" />
     <ClInclude Include="BPixelShader.h" />
+    <ClInclude Include="LLightGroup.h" />
     <ClInclude Include="PostProcessPass.h" />
     <ClInclude Include="BSampler.h" />
     <ClInclude Include="BTexture.h" />

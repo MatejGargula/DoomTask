@@ -1,7 +1,8 @@
 #include "LPointLight.h"
 
-LPointLight::LPointLight(DTGraphics& gfx, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 amb, DirectX::XMFLOAT3 diff, DirectX::XMFLOAT3 spec, float constant, float linear, float quadratic)
+LPointLight::LPointLight(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 amb, DirectX::XMFLOAT3 diff, DirectX::XMFLOAT3 spec, float constant, float linear, float quadratic)
 	:
+	pPcbuf(nullptr),
 	position(pos),
 	ambient(amb),
 	diffuse(diff),
@@ -17,11 +18,32 @@ LPointLight::LPointLight(DTGraphics& gfx, DirectX::XMFLOAT3 pos, DirectX::XMFLOA
 	data.specular = specular;
 	data.att = { constant, linear, quadratic };
 
-	pPcbuf = std::make_unique<BPixelConstantBuffer<PointLightCBuf>>(gfx, 1u);
+	//pPcbuf = std::make_unique<BPixelConstantBuffer<PointLightCBuf>>(gfx, 1u);
 }
+
+//LPointLight::LPointLight()
+//	:
+//	showLightRO(false),
+//	lightRO(nullptr),
+//	pPcbuf(nullptr),
+//	position(0.0f,0.0f, 0.0f),
+//	ambient(1.0f, 1.0f, 1.0f),
+//	diffuse(1.0f, 1.0f, 1.0f),
+//	specular(1.0f, 1.0f, 1.0f),
+//	constant(1.0f),
+//	linear(0.045f),//linear(0.35f),
+//	quadratic(0.0075f)//quadratic(0.44f)
+//
+//{
+//}
 
 void LPointLight::Bind(DTGraphics& gfx) noexcept
 {
+	if (pPcbuf == nullptr)
+	{
+		pPcbuf = std::make_unique<BPixelConstantBuffer<PointLightCBuf>>(gfx, 1u);
+	}
+
 	PointLightCBuf data = {};
 	data.position = position;
 	data.ambient = ambient;

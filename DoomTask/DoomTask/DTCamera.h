@@ -14,7 +14,7 @@ private:
 	float yaw = 0.0f;
 	float pitch = 0.0f;
 	float mouseSensitivity = 0.001f; 
-	float moveSpeed = 5.0f; 
+	float moveSpeed = 15.0f; 
 
 public:
 	DTCamera();
