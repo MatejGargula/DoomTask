@@ -11,6 +11,7 @@ class DTGraphics;
 /// </summary>
 class DepthStencilTexture
 {
+	friend class GBuffer;
 	friend class RenderTargetTexture;
 private: 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;

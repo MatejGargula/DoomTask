@@ -135,6 +135,9 @@
     <ClCompile Include="LLightGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -260,6 +263,9 @@
     <ClInclude Include="LLightGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimpleVertexShader.hlsl">
@@ -290,6 +296,15 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PhongVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DefferedCollectionVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DefferedCollectionPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DefferedFinalPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -37,7 +37,12 @@ void PostProcessPass::createScreenQuad(DTGraphics& gfx)
 	indicesCount = (UINT)indices.size();
 }
 
-PostProcessPass::PostProcessPass(DTGraphics& gfx, const std::wstring& pixelShaderPath, const std::wstring& vertexShaderPath, std::shared_ptr<RenderTargetTexture> source, std::shared_ptr<RenderTargetTexture> target)
+PostProcessPass::PostProcessPass(
+	DTGraphics& gfx,
+	const std::wstring& pixelShaderPath,
+	const std::wstring& vertexShaderPath,
+	std::vector<std::shared_ptr<RenderTargetTexture>> source,
+	std::shared_ptr<RenderTargetTexture> target)
 	:
 	pixelShader(gfx, pixelShaderPath),
 	vertexShader(gfx, vertexShaderPath)
@@ -64,10 +69,13 @@ void PostProcessPass::Render(DTGraphics& gfx) noexcept
 		b->Bind(gfx);
 	}
 
-	sourceTexture->BindAsTexture(gfx, 0);
+	for (unsigned int i = 0; i < sourceTexture.size(); i++)
+	{
+		sourceTexture[i]->BindAsTexture(gfx, i);
+	}
+
 	pixelShader.Bind(gfx);
 	vertexShader.Bind(gfx);
-
 
 	gfx.DrawIndexed(indicesCount);
 }

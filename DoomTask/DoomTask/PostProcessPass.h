@@ -8,7 +8,7 @@ class PostProcessPass
 {
 private:
 	// TODO: add option for multiple textures 
-	std::shared_ptr<RenderTargetTexture> sourceTexture;
+	std::vector<std::shared_ptr<RenderTargetTexture>> sourceTexture;
 	std::shared_ptr<RenderTargetTexture> targetTexture;
 
 	BPixelShader pixelShader;
@@ -23,7 +23,7 @@ public:
 	PostProcessPass(DTGraphics& gfx,
 					 const std::wstring& pixelShaderPath,
 					 const std::wstring& vertexShaderPath,
-					 std::shared_ptr<RenderTargetTexture> source,
+					 std::vector<std::shared_ptr<RenderTargetTexture>> source,
 					 std::shared_ptr<RenderTargetTexture> target = nullptr
 	);
 	void Render(DTGraphics& gfx) noexcept;

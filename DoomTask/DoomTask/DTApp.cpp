@@ -15,8 +15,9 @@ float pos = 0;
 
 DTApp::DTApp()
 	:
-	window(SCREEN_WIDTH,SCREEN_HEIGHT, WINDOW_NAME),
-	lightGroup(window.Gfx())
+	window(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_NAME),
+	lightGroup(window.Gfx()),
+	gBuffer(window.Gfx())
 {
 	InitScene();
 
@@ -24,11 +25,16 @@ DTApp::DTApp()
 	window.ConfineCursor();
 
 	//// Create post processes;
+	//postProcesses.emplace_back( 
+	//	window.Gfx(),
+	//	L"GrayscalePS.cso",
+	//	L"DefaultPostProcessVS.cso",
+	//	window.Gfx().GetMainRenderTexture());
 	postProcesses.emplace_back( 
 		window.Gfx(),
-		L"GrayscalePS.cso",
+		L"DefferedFinalPS.cso",
 		L"DefaultPostProcessVS.cso",
-		window.Gfx().GetMainRenderTexture());
+		gBuffer.GetRenderTextures());
 }
 
 void DTApp::InitScene()
@@ -92,6 +98,7 @@ void DTApp::RunFrame()
 	//sceneObjects[1]->transform.SetRotation(0.0f, angle, 0.0f);
 
 	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
+	gBuffer.Clear(window.Gfx());
 
 	HandleMouseInput(dt);
 	HandleKeyboardInput(dt);
@@ -162,24 +169,44 @@ void DTApp::HandleKeyboardInput(float dt)
 
 void DTApp::HandleRendering(float dt)
 {
-	window.Gfx().EnablePostProcessing();
+	//window.Gfx().EnablePostProcessing();
 	
-	
-	pos += 1.0f * dt;
-	if (pos > 30.0f)
-		pos = 0.0f;
+	//pos += 1.0f * dt;
+	//if (pos > 30.0f)
+	//	pos = 0.0f;
 
-	lightGroup.lights[0]->SetPosition(DirectX::XMFLOAT3(pos,0.0f,pos * 0.3f));
+	//lightGroup.lights[0]->SetPosition(DirectX::XMFLOAT3(pos,0.0f,pos * 0.3f));
 	
 	lightGroup.BindGroup(window.Gfx());
 	
-	lightGroup.RenderLightsRO(window.Gfx());
+	RenderSceneDeffered(dt);
+	//lightGroup.RenderLightsRO(window.Gfx());
 
+	//for (auto& so : sceneObjects)
+	//{
+	//	so->Update(dt);
+	//	so->Render(window.Gfx());
+	//}
+}
+
+void DTApp::RenderSceneDeffered(float dt)
+{
+	// Disable default mesh shaders
+	renderObjects[LEVEL_MESH]->DisableShaders();
+
+	// Bind the G-Buffer textures as multiple render targets
+	gBuffer.BindAsRenderTarget(window.Gfx());
+
+	// Bind Vertex and Pixel shader 
+	gBuffer.BindCollectionShaders(window.Gfx());
+
+	// Render the scene
 	for (auto& so : sceneObjects)
 	{
 		so->Update(dt);
 		so->Render(window.Gfx());
 	}
+
 }
 
 void DTApp::PostProcessFrame()

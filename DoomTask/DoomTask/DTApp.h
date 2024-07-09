@@ -6,6 +6,7 @@
 #include "DTSceneObject.h"
 #include "LLightGroup.h"
 #include "PostProcessPass.h"
+#include "GBuffer.h"
 
 //TODO: Add docs
 class DTApp
@@ -22,8 +23,10 @@ private:
 	DTWindow window;
 	Timer timer;
 	std::vector<std::unique_ptr<class DTSceneObject>> sceneObjects;
-	LLightGroup lightGroup;
 	
+	LLightGroup lightGroup;
+	GBuffer gBuffer;
+
 	std::vector<PostProcessPass> postProcesses;
 
 	static constexpr size_t nDrawables = 180;
@@ -40,6 +43,7 @@ private:
 	void HandleMouseInput(float dt);
 	void HandleKeyboardInput(float dt);
 	void HandleRendering(float dt);	
+	void RenderSceneDeffered(float dt);
 public:
 	DTApp();
 	int Run();

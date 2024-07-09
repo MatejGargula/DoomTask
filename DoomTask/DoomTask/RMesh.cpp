@@ -69,7 +69,7 @@ RMesh::RMesh(DTGraphics& gfx, std::string path)
 	//TODD:: add material bindable
 }
 
-RMesh::RMesh(DTGraphics& gfx, aiMesh& mesh, const aiMaterial* const* materials)
+RMesh::RMesh(DTGraphics& gfx, aiMesh& mesh, const aiMaterial* const* materials, ID3DBlob* pvsbc)
 {
 	std::vector<VertexPosNormTexCoord> vertices;
 	vertices.reserve(mesh.mNumVertices);
@@ -97,13 +97,6 @@ RMesh::RMesh(DTGraphics& gfx, aiMesh& mesh, const aiMaterial* const* materials)
 	// Geometry buffers
 	AddIndexBuffer(std::make_unique<BIndexBuffer>(gfx, indices));
 	AddBind(std::make_unique<BVertexBuffer>(gfx, vertices));
-
-	// Shaders
-	auto pvs = std::make_unique<BVertexShader>(gfx, L"PhongVS.cso");
-	auto pvsbc = pvs->GetBytecode();
-	AddBind(std::move(pvs));
-	//AddBind(std::make_unique<BPixelShader>(gfx, L"SimplePhongPS.cso"));
-	AddBind(std::make_unique<BPixelShader>(gfx, L"PhongPS.cso"));
 
 	//Input layout
 	const std::vector<D3D11_INPUT_ELEMENT_DESC>  ied =

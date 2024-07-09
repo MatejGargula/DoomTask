@@ -23,6 +23,7 @@ class RenderTargetTexture;
 //TODO: Add docs
 class DTGraphics
 {
+	friend class GBuffer;
 	friend class PostProcessPass;
 	friend class DepthStencilTexture;
 	friend class RenderTargetTexture;

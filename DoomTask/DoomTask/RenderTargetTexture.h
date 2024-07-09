@@ -9,6 +9,7 @@ class DepthStencilTexture;
 // TODO: add docs 
 class RenderTargetTexture
 {
+	friend class GBuffer;
 	friend class DepthStencilTexture;
 private: 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTextureView;

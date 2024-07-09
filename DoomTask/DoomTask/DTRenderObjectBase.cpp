@@ -30,3 +30,13 @@ void DTRenderObjectBase::AddIndexBuffer(std::unique_ptr<class BIndexBuffer> ibuf
 	pIndexBuffer = ibuf.get();
 	this->binds.push_back(std::move(ibuf));
 }
+
+void DTRenderObjectBase::DisableShaders()
+{
+	shadersEnabled = false;
+}
+
+void DTRenderObjectBase::EnableShaders()
+{
+	shadersEnabled = false;
+}
