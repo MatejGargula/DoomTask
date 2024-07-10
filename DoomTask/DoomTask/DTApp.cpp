@@ -97,7 +97,7 @@ void DTApp::RunFrame()
 
 	//sceneObjects[1]->transform.SetRotation(0.0f, angle, 0.0f);
 
-	window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
+	//window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
 	gBuffer.Clear(window.Gfx());
 
 	HandleMouseInput(dt);

@@ -169,7 +169,7 @@ RMesh::RMesh(DTGraphics& gfx, aiMesh& mesh, const aiMaterial* const* materials, 
 			aiString path; // filename
 
 			aiReturn texFound = mat->GetTexture(aiTextureType_SPECULAR, 0, &path);
-			std::string textureName = path.data;
+			std::string textureName = std::string("Models\\") + path.data;
 
 			materialBind->SetSpecular(std::make_unique<BTexture>(gfx, textureName, 1), shininess * strength);
 		}

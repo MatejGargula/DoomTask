@@ -14,11 +14,17 @@ GBuffer::GBuffer(DTGraphics& gfx)
 
 void GBuffer::BindAsRenderTarget(DTGraphics& gfx)
 {
-	ID3D11RenderTargetView* renderTargets[] = {
-		gTextures[DIFFUSE_TEX]->pRenderTargetView.Get(),
-		gTextures[POSITION_TEX]->pRenderTargetView.Get(),
-		gTextures[NORMAL_TEX]->pRenderTargetView.Get()
-	};
+	//ID3D11RenderTargetView* renderTargets[] = {
+	//	gTextures[DIFFUSE_TEX]->pRenderTargetView.Get(),
+	//	gTextures[POSITION_TEX]->pRenderTargetView.Get(),
+	//	gTextures[NORMAL_TEX]->pRenderTargetView.Get()
+	//};
+
+	ID3D11RenderTargetView* renderTargets[N_GTEXTURES] = {};
+	for (unsigned int i = 0; i < N_GTEXTURES; i++)
+	{
+		renderTargets[i] = gTextures[i]->pRenderTargetView.Get();
+	}
 
 	// TODO: Add stencil depth texture
 	gfx.pContext->OMSetRenderTargets(N_GTEXTURES, renderTargets, depthRenderTexture.pDepthStencilView.Get());

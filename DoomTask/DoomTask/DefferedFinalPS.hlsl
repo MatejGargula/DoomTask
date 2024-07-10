@@ -1,6 +1,7 @@
 Texture2D texDiffuse : register(t0);
 Texture2D texPosition : register(t1);
 Texture2D texNormal : register(t2);
+Texture2D texSpecular : register(t3);
 
 SamplerState texSampler;
 
@@ -26,14 +27,14 @@ cbuffer CLightBuf : register(b1)
     float pad[3];
 };
 
-cbuffer CMaterial : register(b2)
-{
-    float3 ambientMat;
-    bool useDiffTex;
-    float3 diffuseMat;
-    bool useSpecTex;
-    float4 specMat;
-};
+//cbuffer CMaterial : register(b2)
+//{
+//    float3 ambientMat;
+//    bool useDiffTex;
+//    float3 diffuseMat;
+//    bool useSpecTex;
+//    float4 specMat;
+//};
 
 // calculates the color when using a point light.
 float3 CalcPointLight(LPointLight light, float3 normal, float3 pixelPos, float3 viewDir, float3 matDiffuse, float3 matSpecular, float shininess)
@@ -64,8 +65,8 @@ float4 main(float2 uv : Texcoord) : SV_TARGET
     float3 pixelPosition = texPosition.Sample(texSampler, uv).rgb;
     float3 normal = texNormal.Sample(texSampler, uv);
     
-    float3 specularMat = specMat.rgb;
-    float shininess = specMat.a;
+    float4 specularMat = texSpecular.Sample(texSampler, uv);    
+    float shininess = specularMat.a;
    
     float3 viewDir = normalize(viewPos - pixelPosition);
     float3 norm = normalize(normal);
@@ -74,7 +75,7 @@ float4 main(float2 uv : Texcoord) : SV_TARGET
     
     for (int i = 0; i < nLights; i++)
     {
-        result += CalcPointLight(lights[i], norm, pixelPosition, viewDir, diffuseMaterialColor, specularMat, shininess);
+        result += CalcPointLight(lights[i], norm, pixelPosition, viewDir, diffuseMaterialColor, specularMat.rgb, shininess);
     }
     
     result = saturate(result);

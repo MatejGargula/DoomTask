@@ -12,6 +12,7 @@ private:
 		DIFFUSE_TEX = 0,
 		POSITION_TEX,
 		NORMAL_TEX,
+		SPECULAR_TEX,
 		N_GTEXTURES
 	};
 

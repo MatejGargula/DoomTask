@@ -43,8 +43,6 @@ cbuffer CMaterial : register(b2)
     float4 specMat;
 };
 
-
-
 // calculates the color when using a point light.
 float3 CalcPointLight(LPointLight light, float3 normal, float3 pixelPos, float3 viewDir, float3 matDiffuse, float3 matSpecular, float shininess)
 {
@@ -70,55 +68,30 @@ float3 CalcPointLight(LPointLight light, float3 normal, float3 pixelPos, float3 
 
 float4 main(float3 normal : Normal, float3 worldPostion : Position, float2 texCoord : TexCoord) : SV_TARGET
 {
-    float3 specularMat = specMat.rgb;
-    float shininess = specMat.a;
-    
     float3 viewDir = normalize(viewPos - worldPostion);
     float3 norm = normalize(normal);
     
     float3 diffuseMaterialColor = diffuseMat;
     if (useDiffTex)
     {
-        //return texDiffuse.Sample(TexSampler, texCoord);
         diffuseMaterialColor = texDiffuse.Sample(TexSampler, texCoord).bgr;
     }
     
-    //float3 ambientColor = lights[0].lightAmbient * diffuseMaterialColor;
-    //float3 finalColor = ambientColor;
+    float3 specularMaterialColor = specMat.rgb;
+    float shininess = specMat.a;
+    
+    if (useSpecTex)
+    {
+        specularMaterialColor = texSpecular.Sample(TexSampler, texCoord).bgr;
+    }
     
     float3 result = float3(0.0f,0.0f,0.0f);
     
     for (int i = 0; i < nLights; i++)
     {
-        result += CalcPointLight(lights[i], norm, worldPostion, viewDir, diffuseMaterialColor, specularMat, shininess);
+        result += CalcPointLight(lights[i], norm, worldPostion, viewDir, diffuseMaterialColor, specularMaterialColor, shininess);
     }
-        // ambient
-        
     
-    //// diffuse 
-    //    float3 lightDir = normalize(lights[i].lightPosition - worldPostion);
-    //    float diff = max(dot(norm, lightDir), 0.0);
-    //    float3 diffuseColor = lights[i].lightDiffuse * diff * diffuseMaterialColor;
-    //
-    //// specular
-    //    float3 reflectDir = reflect(-lightDir, norm);
-    //    float spec = 0.0;
-    //    if (diff > 0.0) // Only calculate specular if the fragment is facing the light
-    //    {
-    //        spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-    //    }
-    //    float3 specularColor = lights[i].lightSpecular * spec * specularMat;
-    //
-    //// attenuation
-    //    float dist = distance(lights[i].lightPosition, worldPostion);
-    //    float attenuation = 1.0 / (lights[i].att.x + lights[i].att.y * dist + lights[i].att.z * (dist * dist));
-    //
-    //    //ambientColor *= attenuation;
-    //    //diffuseColor *= attenuation;
-    //    //specularColor *= attenuation;
-    //    
-    //    finalColor = saturate( diffuseColor + specularColor);
-    //}
     result = saturate(result);
     
     return float4(result, 1.0);

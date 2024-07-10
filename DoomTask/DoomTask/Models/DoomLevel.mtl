@@ -1,0 +1,38 @@
+# Blender MTL File: 'DoomLevel.blend'
+# Material Count: 3
+
+newmtl Material.001
+Ns 25.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.200000 0.010995 0.009165
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd DoomLevelWall.png
+map_Ks DoomLevelWallSpec.png
+
+newmtl Material.002
+Ns 25.000000
+Ka 0.191176 0.191176 0.191176
+Kd 0.421252 0.717936 1.000000
+Ks 0.595588 0.595588 0.595588
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd DoomLevelFloor.png
+map_Ks DoomLevelFloorSpec.png
+
+newmtl Material.003
+Ns 25.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.005450 0.004070 0.006370
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd DoomLevelCeiling.png
+map_Ks DoomLevelCeilingSpec.png
