@@ -42,6 +42,7 @@ void DTApp::InitScene()
 	renderObjects.resize(NUM_RO);
 	renderObjects[BOX] = std::make_shared<RBox>(window.Gfx());
 	renderObjects[LEVEL_MESH] = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\DoomLevel.obj");;
+	renderObjects[TESTING_SPHERE] = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\Sphere.obj");;
 
 	//std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
 	//std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
@@ -51,6 +52,22 @@ void DTApp::InitScene()
 	level->transform.SetPosition(0.0f, -3.0f, 0.0f);
 	level->transform.SetRotation(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(level));
+
+	std::unique_ptr<DTSceneObject> sphere1 = std::make_unique<DTSceneObject>(window.Gfx(), renderObjects[TESTING_SPHERE]);
+	sphere1->transform.SetPosition(20.0f, 0.0f, 5.0f);
+	sphere1->transform.SetRotation(0.0f, 0.0f, 0.0f);
+	sceneObjects.push_back(std::move(sphere1));
+
+	std::unique_ptr<DTSceneObject> sphere2 = std::make_unique<DTSceneObject>(window.Gfx(), renderObjects[TESTING_SPHERE]);
+	sphere2->transform.SetPosition(5.0f, 0.0f, 15.0f);
+	sphere2->transform.SetRotation(0.0f, 0.0f, 0.0f);
+	sceneObjects.push_back(std::move(sphere2));
+
+	std::unique_ptr<DTSceneObject> sphere3 = std::make_unique<DTSceneObject>(window.Gfx(), renderObjects[TESTING_SPHERE]);
+	sphere3->transform.SetPosition(3.0f, 0.0f, 35.0f);
+	sphere3->transform.SetRotation(0.0f, 0.0f, 0.0f);
+	sceneObjects.push_back(std::move(sphere3));
+
 
 	std::unique_ptr<LPointLight> light1 = std::make_unique<LPointLight>();
 	light1->EnableLightRenderObject(renderObjects[BOX]);
@@ -180,19 +197,15 @@ void DTApp::HandleRendering(float dt)
 	lightGroup.BindGroup(window.Gfx());
 	
 	RenderSceneDeffered(dt);
-	//lightGroup.RenderLightsRO(window.Gfx());
-
-	//for (auto& so : sceneObjects)
-	//{
-	//	so->Update(dt);
-	//	so->Render(window.Gfx());
-	//}
 }
 
 void DTApp::RenderSceneDeffered(float dt)
 {
 	// Disable default mesh shaders
-	renderObjects[LEVEL_MESH]->DisableShaders();
+	for (int i = 0; i < NUM_RO; i++)
+	{
+		renderObjects[i]->DisableShaders();
+	}
 
 	// Bind the G-Buffer textures as multiple render targets
 	gBuffer.BindAsRenderTarget(window.Gfx());

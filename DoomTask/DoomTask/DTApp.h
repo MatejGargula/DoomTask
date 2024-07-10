@@ -15,6 +15,7 @@ private:
 	enum {
 		BOX = 0,
 		LEVEL_MESH,
+		TESTING_SPHERE,
 		NUM_RO
 	};
 
