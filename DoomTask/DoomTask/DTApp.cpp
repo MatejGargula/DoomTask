@@ -24,17 +24,22 @@ DTApp::DTApp()
 	window.DisableCursor();
 	window.ConfineCursor();
 
-	//// Create post processes;
-	//postProcesses.emplace_back( 
-	//	window.Gfx(),
-	//	L"GrayscalePS.cso",
-	//	L"DefaultPostProcessVS.cso",
-	//	window.Gfx().GetMainRenderTexture());
+	std::shared_ptr<RenderTargetTexture> targetTex = std::make_shared<RenderTargetTexture>(window.Gfx(), SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	// Create post processes;
 	postProcesses.emplace_back( 
 		window.Gfx(),
 		L"DefferedFinalPS.cso",
 		L"DefaultPostProcessVS.cso",
-		gBuffer.GetRenderTextures());
+		gBuffer.GetRenderTextures(),
+		targetTex);
+
+	postProcesses.emplace_back(
+		window.Gfx(),
+		L"OldSchoolPS.cso",
+		L"DefaultPostProcessVS.cso",
+		targetTex);
+
 }
 
 void DTApp::InitScene()

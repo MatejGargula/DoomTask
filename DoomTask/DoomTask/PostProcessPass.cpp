@@ -54,6 +54,19 @@ PostProcessPass::PostProcessPass(
 	createScreenQuad(gfx);
 }
 
+PostProcessPass::PostProcessPass(DTGraphics& gfx, const std::wstring& pixelShaderPath, const std::wstring& vertexShaderPath, std::shared_ptr<RenderTargetTexture> source, std::shared_ptr<RenderTargetTexture> target)
+	:
+	pixelShader(gfx, pixelShaderPath),
+	vertexShader(gfx, vertexShaderPath)
+{
+	sourceTexture.resize(1);
+	sourceTexture[0] = source;
+	if (target != nullptr)
+		targetTexture = target;
+
+	createScreenQuad(gfx);
+}
+
 void PostProcessPass::Render(DTGraphics& gfx) noexcept
 {
 	if (targetTexture == nullptr)
