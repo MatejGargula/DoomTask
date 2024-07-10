@@ -92,3 +92,13 @@ void PostProcessPass::Render(DTGraphics& gfx) noexcept
 
 	gfx.DrawIndexed(indicesCount);
 }
+
+std::shared_ptr<RenderTargetTexture> PostProcessPass::GetTargetTexture()
+{
+	return targetTexture;
+}
+
+void PostProcessPass::SetTargetTexture(std::shared_ptr<RenderTargetTexture> targetTex)
+{
+	targetTexture = targetTex;
+}

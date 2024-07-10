@@ -138,6 +138,15 @@
     <ClCompile Include="GBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BDomainShader.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BHullShader.cpp">
+      <Filter>Source Files\BindObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="DTRenderQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -264,6 +273,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BHullShader.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="BDomainShader.h">
+      <Filter>Header Files\BindObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DTRenderQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,14 @@ private:
 
 	// TODO add material
 public: 
+
+	enum Type
+	{
+		DEFAULT,
+		TESSALATED
+	};
+
+	Type type = DEFAULT;
 	BTransform transform;
 
 	DTSceneObject(DTGraphics& gfx);
@@ -19,7 +27,7 @@ public:
 	DTSceneObject(DTGraphics& gfx, std::shared_ptr<DTRenderObjectBase> ro, std::shared_ptr<BMaterial> mat);
 
 	void Render(DTGraphics& gfx);
-	void Update(float dt);
+	virtual void Update(float dt);
 	void SetRenderObject(std::shared_ptr<DTRenderObjectBase> ro);
 	void SetMaterial(std::shared_ptr<BMaterial> mat);
 };

@@ -7,6 +7,7 @@
 #include "LLightGroup.h"
 #include "PostProcessPass.h"
 #include "GBuffer.h"
+#include "DTRenderQueue.h"
 
 //TODO: Add docs
 class DTApp
@@ -18,33 +19,22 @@ private:
 		TESTING_SPHERE,
 		NUM_RO
 	};
-
-	std::vector<std::shared_ptr<DTRenderObjectBase>> renderObjects;
-
+	
 	DTWindow window;
 	Timer timer;
-	std::vector<std::unique_ptr<class DTSceneObject>> sceneObjects;
+
+	std::vector<std::shared_ptr<DTRenderObjectBase>> renderObjects;
+	std::vector<std::unique_ptr<DTSceneObject>> sceneObjects;
 	
-	LLightGroup lightGroup;
-	GBuffer gBuffer;
-
-	std::vector<PostProcessPass> postProcesses;
-
-	static constexpr size_t nDrawables = 180;
+	DTRenderQueue renderQueue;
 
 	bool shouldCreateLight = false;
 
-	void AddLight(float x, float y, float z);
-
 	void RunFrame();
-	void PostProcessFrame();
-
 	void InitScene();
-
 	void HandleMouseInput(float dt);
 	void HandleKeyboardInput(float dt);
-	void HandleRendering(float dt);	
-	void RenderSceneDeffered(float dt);
+
 public:
 	DTApp();
 	int Run();

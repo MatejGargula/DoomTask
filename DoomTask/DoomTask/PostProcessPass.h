@@ -34,6 +34,7 @@ public:
 		std::shared_ptr<RenderTargetTexture> target = nullptr
 	);
 	void Render(DTGraphics& gfx) noexcept;
-	
+	std::shared_ptr<RenderTargetTexture> GetTargetTexture();
+	void SetTargetTexture(std::shared_ptr<RenderTargetTexture> targetTex);
 };
 

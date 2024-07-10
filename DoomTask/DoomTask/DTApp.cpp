@@ -16,8 +16,7 @@ float pos = 0;
 DTApp::DTApp()
 	:
 	window(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_NAME),
-	lightGroup(window.Gfx()),
-	gBuffer(window.Gfx())
+	renderQueue(window.Gfx())
 {
 	InitScene();
 
@@ -25,21 +24,6 @@ DTApp::DTApp()
 	window.ConfineCursor();
 
 	std::shared_ptr<RenderTargetTexture> targetTex = std::make_shared<RenderTargetTexture>(window.Gfx(), SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	// Create post processes;
-	postProcesses.emplace_back( 
-		window.Gfx(),
-		L"DefferedFinalPS.cso",
-		L"DefaultPostProcessVS.cso",
-		gBuffer.GetRenderTextures(),
-		targetTex);
-
-	postProcesses.emplace_back(
-		window.Gfx(),
-		L"OldSchoolPS.cso",
-		L"DefaultPostProcessVS.cso",
-		targetTex);
-
 }
 
 void DTApp::InitScene()
@@ -48,6 +32,9 @@ void DTApp::InitScene()
 	renderObjects[BOX] = std::make_shared<RBox>(window.Gfx());
 	renderObjects[LEVEL_MESH] = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\DoomLevel.obj");;
 	renderObjects[TESTING_SPHERE] = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\Sphere.obj");;
+
+	renderObjects[LEVEL_MESH]->DisableShaders();
+	renderObjects[TESTING_SPHERE]->DisableShaders();
 
 	//std::shared_ptr<DTRenderObjectBase> plane = std::make_shared<RTexPlane>(window.Gfx());
 	//std::shared_ptr<DTRenderObjectBase> suzanne = std::make_shared<RMesh>(window.Gfx(), "Models\\suzanne.obj");
@@ -73,16 +60,8 @@ void DTApp::InitScene()
 	sphere3->transform.SetRotation(0.0f, 0.0f, 0.0f);
 	sceneObjects.push_back(std::move(sphere3));
 
-
-	std::unique_ptr<LPointLight> light1 = std::make_unique<LPointLight>();
-	light1->EnableLightRenderObject(renderObjects[BOX]);
-
-	std::unique_ptr<LPointLight> light2 = std::make_unique<LPointLight>();
-	light2->SetPosition(DirectX::XMFLOAT3(20.0f, 0.0f, 42.0f));
-	light2->EnableLightRenderObject(renderObjects[BOX]);
-
-	lightGroup.AddLight(std::move(light1));
-	lightGroup.AddLight(std::move(light2));
+	renderQueue.AddLight(0.0f, 0.0f, 0.0f);
+	renderQueue.AddLight(20.0f, 0.0f, 42.0f);
 }
 
 int DTApp::Run()
@@ -98,35 +77,18 @@ int DTApp::Run()
 	return 42;
 }
 
-void DTApp::AddLight(float x, float y, float z)
-{
-	std::unique_ptr<LPointLight> light = std::make_unique<LPointLight>();
-	light->SetPosition(DirectX::XMFLOAT3(x, y, z));
-	light->EnableLightRenderObject(renderObjects[BOX]);
-
-	lightGroup.AddLight(std::move(light));
-}
-
 void DTApp::RunFrame()
 {
 	const float dt = timer.Mark();
-	//float x = window.mouse.GetPosX() / ((float)SCREEN_WIDTH) - 1.0f;
-	//float y = -window.mouse.GetPosY() / ((float)SCREEN_HEIGHT) + 1.0f;
 	
 	angle += dt/2.2f * 180;
 	if (angle > 360)
 		angle -= 360;
 
-	//sceneObjects[1]->transform.SetRotation(0.0f, angle, 0.0f);
-
-	//window.Gfx().ClearBuffer(0.9f, 0.8f, 1.0f);
-	gBuffer.Clear(window.Gfx());
-
 	HandleMouseInput(dt);
 	HandleKeyboardInput(dt);
-	HandleRendering(dt);
 
-	PostProcessFrame();
+	renderQueue.RenderObjects(window.Gfx(), sceneObjects, renderObjects, dt);
 
 	window.Gfx().EndFrame();
 	
@@ -168,7 +130,7 @@ void DTApp::HandleKeyboardInput(float dt)
 	{
 		if (!shouldCreateLight)
 		{
-			AddLight(window.Gfx().camera->GetPosition().x, window.Gfx().camera->GetPosition().y, window.Gfx().camera->GetPosition().z);
+			renderQueue.AddLight(window.Gfx().camera->GetPosition().x, window.Gfx().camera->GetPosition().y, window.Gfx().camera->GetPosition().z);
 		}
 		shouldCreateLight = true;
 	}
@@ -179,60 +141,12 @@ void DTApp::HandleKeyboardInput(float dt)
 	
 
 	window.Gfx().camera->UpdateMovement(dt, movingForward, movingBackward, movingLeft, movingRight);
-	std::ostringstream oss;
-	oss << "|Number of Lights: " << lightGroup.lights.size() << " |";
+	//std::ostringstream oss;
+	//oss << "|Number of Lights: " << lightGroup.lights.size() << " |";
 	//oss << "X: " << window.Gfx().camera->GetPosition().x
 	//	<< " Y: " << window.Gfx().camera->GetPosition().y
 	//	<< " Z: " << window.Gfx().camera->GetPosition().z;
 	
-	std::string positionStr = oss.str();
-	window.SetTitle(positionStr);
-}
-
-void DTApp::HandleRendering(float dt)
-{
-	//window.Gfx().EnablePostProcessing();
-	
-	//pos += 1.0f * dt;
-	//if (pos > 30.0f)
-	//	pos = 0.0f;
-
-	//lightGroup.lights[0]->SetPosition(DirectX::XMFLOAT3(pos,0.0f,pos * 0.3f));
-	
-	lightGroup.BindGroup(window.Gfx());
-	
-	RenderSceneDeffered(dt);
-}
-
-void DTApp::RenderSceneDeffered(float dt)
-{
-	// Disable default mesh shaders
-	for (int i = 0; i < NUM_RO; i++)
-	{
-		renderObjects[i]->DisableShaders();
-	}
-
-	// Bind the G-Buffer textures as multiple render targets
-	gBuffer.BindAsRenderTarget(window.Gfx());
-
-	// Bind Vertex and Pixel shader 
-	gBuffer.BindCollectionShaders(window.Gfx());
-
-	// Render the scene
-	for (auto& so : sceneObjects)
-	{
-		so->Update(dt);
-		so->Render(window.Gfx());
-	}
-
-}
-
-void DTApp::PostProcessFrame()
-{
-	window.Gfx().DisablePostProcessing();
-	//TODO:: handle post processes;
-	for (unsigned int i = 0; i < postProcesses.size(); i++)
-	{
-		postProcesses[i].Render(window.Gfx());
-	}
+	//std::string positionStr = oss.str();
+	//window.SetTitle(positionStr);
 }
