@@ -92,3 +92,31 @@ public:
 		GetContext(gfx)->PSSetConstantBuffers(slotNum, 1u, pConstantBuffer.GetAddressOf());
 	}
 };
+
+template<typename C>
+class BHullConstantBuffer : public BConstantBuffer<C>
+{
+	using BConstantBuffer<C>::pConstantBuffer;
+	using BConstantBuffer<C>::slotNum;
+	using DTBindObjectBase::GetContext;
+public:
+	using BConstantBuffer<C>::BConstantBuffer;
+	void Bind(DTGraphics& gfx) noexcept override
+	{
+		GetContext(gfx)->HSSetConstantBuffers(slotNum, 1u, pConstantBuffer.GetAddressOf());
+	}
+};
+
+template<typename C>
+class BDomainConstantBuffer : public BConstantBuffer<C>
+{
+	using BConstantBuffer<C>::pConstantBuffer;
+	using BConstantBuffer<C>::slotNum;
+	using DTBindObjectBase::GetContext;
+public:
+	using BConstantBuffer<C>::BConstantBuffer;
+	void Bind(DTGraphics& gfx) noexcept override
+	{
+		GetContext(gfx)->DSSetConstantBuffers(slotNum, 1u, pConstantBuffer.GetAddressOf());
+	}
+};
