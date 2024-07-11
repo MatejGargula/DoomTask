@@ -21,6 +21,11 @@ void BVertexShader::Bind(DTGraphics& gfx) noexcept
 	GetContext(gfx)->VSSetShader(pVertexShader.Get(), nullptr, 0u);
 }
 
+void BVertexShader::Unbind(DTGraphics& gfx) noexcept
+{
+	GetContext(gfx)->VSSetShader(nullptr, nullptr, 0u);
+}
+
 ID3DBlob* BVertexShader::GetBytecode() const noexcept
 {
 	return pBytecodeBlob.Get();

@@ -1,5 +1,9 @@
 #include "DTBindObjectBase.h"
 
+void DTBindObjectBase::Unbind(DTGraphics& gfx) noexcept
+{
+}
+
 ID3D11DeviceContext* DTBindObjectBase::GetContext(DTGraphics& gfx) noexcept
 {
 	return gfx.pContext.Get();

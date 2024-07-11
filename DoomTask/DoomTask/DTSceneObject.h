@@ -7,6 +7,7 @@
 class DTSceneObject
 {
 private:
+	//std::shared_ptr<DTRenderObjectBase> renderObject; // Mesh or primitive
 	std::shared_ptr<DTRenderObjectBase> renderObject; // Mesh or primitive
 	std::shared_ptr<BMaterial> material; // Mesh or primitive
 

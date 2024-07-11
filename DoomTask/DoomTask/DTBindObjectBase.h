@@ -12,6 +12,7 @@ class DTBindObjectBase
 public:
 public:
 	virtual void Bind(DTGraphics& gfx) noexcept = 0;
+	virtual void Unbind(DTGraphics& gfx) noexcept;
 	virtual ~DTBindObjectBase() = default;
 protected:
 	static ID3D11DeviceContext* GetContext(DTGraphics& gfx) noexcept;

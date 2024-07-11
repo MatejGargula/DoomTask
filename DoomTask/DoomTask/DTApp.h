@@ -24,8 +24,8 @@ private:
 	Timer timer;
 
 	std::vector<std::shared_ptr<DTRenderObjectBase>> renderObjects;
-	std::vector<std::unique_ptr<DTSceneObject>> sceneObjects;
-	
+	//std::vector<std::unique_ptr<DTSceneObject>> sceneObjects;
+	DTScene scene;
 	DTRenderQueue renderQueue;
 
 	bool shouldCreateLight = false;

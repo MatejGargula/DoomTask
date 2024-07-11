@@ -34,6 +34,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pWireRasterState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pSolidRasterState;
 
 	DxgiInfoManager infoManager;
 
@@ -42,11 +44,6 @@ private:
 	std::shared_ptr<RenderTargetTexture> mainSceneRenderTexture;
 	std::shared_ptr<DepthStencilTexture> mainDepthRenderTexture;
 	
-	// TODO: Add a vector to hold postProcess passes
-	//std::vector<PostProcessPass> postProcesses;
-
-	// TODO: add deffered render passes with G-Buffer
-
 public:
 	std::unique_ptr<DTCamera> camera;
 
@@ -55,13 +52,9 @@ public:
 	DTGraphics& operator=(const DTGraphics&) = delete;
 
 	void EndFrame();
-	void ClearBuffer(float r, float g, float b) noexcept;
+	void ClearBackBuffer(float r, float g, float b) noexcept;
 	void DrawIndexed(UINT count) noexcept;
-	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
-	DirectX::XMMATRIX GetProjection() const noexcept;
 	
-	void DrawTestTriangle(float angle, float x, float z);
-
 	/// <summary>
 	/// Switches the render target from back buffer to a main renderTexture.
 	/// </summary>
@@ -81,6 +74,11 @@ public:
 	/// Getter for is processed enabled
 	/// </summary>
 	bool isPostprocessingEnabled();
+
+	void SetTopology(D3D11_PRIMITIVE_TOPOLOGY type);
+	void EnableWireframe();
+	void DisableWireframe();
+
 #pragma region Nested Classes
 
 	class Exception : public DTException

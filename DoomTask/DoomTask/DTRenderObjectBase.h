@@ -17,7 +17,6 @@ public:
 	
 	virtual ~DTRenderObjectBase() = default;
 	virtual void Render(DTGraphics& gfx) const noexcept;
-	virtual void Render(DTGraphics& gfx, BTransform &transform) const noexcept;
 	virtual void DisableShaders();
 	virtual void EnableShaders();
 

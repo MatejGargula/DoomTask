@@ -147,6 +147,9 @@
     <ClCompile Include="DTRenderQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DTScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DTWnds.h">
@@ -284,6 +287,9 @@
     <ClInclude Include="DTRenderQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DTScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SimpleVertexShader.hlsl">
@@ -329,6 +335,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="TestingDS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="HullShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

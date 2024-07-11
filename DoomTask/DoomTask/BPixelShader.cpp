@@ -20,3 +20,8 @@ void BPixelShader::Bind(DTGraphics& gfx) noexcept
 {
 	GetContext(gfx)->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 }
+
+void BPixelShader::Unbind(DTGraphics& gfx) noexcept
+{
+	GetContext(gfx)->PSSetShader(nullptr, nullptr, 0u);
+}

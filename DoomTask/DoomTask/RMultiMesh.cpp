@@ -24,36 +24,22 @@ RMultiMesh::RMultiMesh(DTGraphics& gfx, std::string path)
 
 void RMultiMesh::Render(DTGraphics& gfx) const noexcept
 {
-	if (VS != nullptr && shadersEnabled)
-		VS->Bind(gfx);
-
-	if (PS != nullptr && shadersEnabled)
-		PS->Bind(gfx);
-
+	//if (VS != nullptr && shadersEnabled)
+	//	VS->Bind(gfx);
+	//
+	//if (PS != nullptr && shadersEnabled)
+	//	PS->Bind(gfx);
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Render(gfx);
 	}
 }
 
-void RMultiMesh::Render(DTGraphics& gfx, BTransform& transform) const noexcept
-{
-	if (VS != nullptr && shadersEnabled)
-		VS->Bind(gfx);
-	
-	if (PS != nullptr && shadersEnabled)
-		PS->Bind(gfx);
-
-	for (unsigned int i = 0; i < meshes.size(); i++)
-	{
-		meshes[i]->Render(gfx, transform);
-	}
-}
 void RMultiMesh::SetPS(DTGraphics& gfx, const std::wstring& path)
 {
-	PS = std::make_unique<BPixelShader>(gfx, path);
+	//PS = std::make_unique<BPixelShader>(gfx, path);
 }
 void RMultiMesh::SetVS(DTGraphics& gfx, const std::wstring& path)
 {
-	VS = std::make_unique<BVertexShader>(gfx, path);
+	//VS = std::make_unique<BVertexShader>(gfx, path);
 }

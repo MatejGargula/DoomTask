@@ -153,18 +153,25 @@ DTGraphics::DTGraphics(HWND hWnd)
 
 	HRESULT hr;
 
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_0,
+	};
+
+	D3D_FEATURE_LEVEL featureLevel;
+
 	GFX_THROW_FAILED( D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
 		0,
-		nullptr,
-		0,
+		featureLevels,
+		ARRAYSIZE(featureLevels),
 		D3D11_SDK_VERSION,
 		&sd,
 		&pSwap,
 		&pDevice,
-		nullptr,
+		&featureLevel,
 		&pContext
 	));
 
@@ -190,29 +197,6 @@ DTGraphics::DTGraphics(HWND hWnd)
 	
 	//// bind depth state
 	pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
-	
-	//// create depth stensil texture
-	//Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
-	//D3D11_TEXTURE2D_DESC descDepth = {};
-	//descDepth.Width = SCREEN_WIDTH;
-	//descDepth.Height = SCREEN_HEIGHT;
-	//descDepth.MipLevels = 1u;
-	//descDepth.ArraySize = 1u;
-	//descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-	//descDepth.SampleDesc.Count = 1u;
-	//descDepth.SampleDesc.Quality = 0u;
-	//descDepth.Usage = D3D11_USAGE_DEFAULT;
-	//descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	//GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
-
-	//// create view of depth stensil texture
-	//D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	//descDSV.Format = DXGI_FORMAT_D32_FLOAT;
-	//descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	//descDSV.Texture2D.MipSlice = 0u;
-	//GFX_THROW_INFO(pDevice->CreateDepthStencilView(
-	//	pDepthStencil.Get(), &descDSV, &pDSV
-	//));
 	
 	// Render target
 	DisablePostProcessing();
@@ -246,6 +230,20 @@ DTGraphics::DTGraphics(HWND hWnd)
 		nearZ,
 		farZ
 	);
+
+	D3D11_RASTERIZER_DESC rdw = {};
+	rdw.FillMode = D3D11_FILL_WIREFRAME;
+	rdw.CullMode = D3D11_CULL_NONE;
+	rdw.DepthClipEnable = true;
+
+	D3D11_RASTERIZER_DESC rds = {};
+	rds.FillMode = D3D11_FILL_SOLID;
+	rds.CullMode = D3D11_CULL_BACK;
+
+	pDevice->CreateRasterizerState(&rdw,&pWireRasterState);
+	pDevice->CreateRasterizerState(&rds, &pSolidRasterState);
+	
+	DisableWireframe();
 }
 
 void DTGraphics::EndFrame()
@@ -265,126 +263,15 @@ void DTGraphics::EndFrame()
 	}
 }
 
-void DTGraphics::ClearBuffer(float r, float g, float b) noexcept
+void DTGraphics::ClearBackBuffer(float r, float g, float b) noexcept
 {
 	const float color[] = { r,g,b,1.0f };
 
-	//if (postProcessingEnabled)
-	//{
 	mainSceneRenderTexture->ClearRenderTarget(*this, color);
 	mainDepthRenderTexture->Clear(*this);
-	//	return;
-	//}
+	
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
 	//pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-}
-
-void DTGraphics::DrawTestTriangle(float angle, float x, float z)
-{
-	//const std::vector<Vertex> vertices =
-	//{
-	//	{0.0f, 0.5f, 255,0,0,0},
-	//	{0.5, -0.5f, 0,255,0,0},
-	//	{-0.5f, -0.5f, 0,0,255,0}
-	//};
-	
-	struct Vertex
-	{
-		struct
-		{
-			float x;
-			float y;
-			float z;
-		} pos;
-	};
-
-	const std::vector<Vertex> vertices =
-	{
-		{ -1.0f,-1.0f,-1.0f	 },
-		{ 1.0f,-1.0f,-1.0f	 },
-		{ -1.0f,1.0f,-1.0f	 },
-		{ 1.0f,1.0f,-1.0f	  },
-		{ -1.0f,-1.0f,1.0f	 },
-		{ 1.0f,-1.0f,1.0f	  },
-		{ -1.0f,1.0f,1.0f	 },
-		{ 1.0f,1.0f,1.0f	 },
-	};
-
-	const std::vector<unsigned short> indicies =
-	{
-		0,2,1, 2,3,1,
-		1,3,5, 3,7,5,
-		2,6,3, 3,6,7,
-		4,5,7, 4,7,6,
-		0,4,2, 2,4,6,
-		0,1,4, 1,5,4
-	};
-
-	std::unique_ptr<BIndexBuffer> ibuff = std::make_unique<BIndexBuffer>(*this,indicies);
-	ibuff->Bind(*this);
-
-	std::unique_ptr<DTBindObjectBase> vb = std::make_unique<BVertexBuffer>(*this,vertices);
-	vb->Bind(*this);
-
-	HRESULT hr = {};
-
-	auto pvs = std::make_unique<BVertexShader>(*this, L"SimpleVertexShader.cso");
-	auto pvsbc = pvs->GetBytecode();
-	pvs->Bind(*this);
-
-	auto pps = std::make_unique<BPixelShader>(*this, L"SimplePixelShader.cso");
-	pps->Bind(*this);
-
-	//Input layout
-	const std::vector<D3D11_INPUT_ELEMENT_DESC>  ied =
-	{
-		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-	
-	std::unique_ptr<DTBindObjectBase> il = std::make_unique<BInputLayout>(*this, ied, pvsbc);
-	il->Bind(*this);
-
-	//CONSTANT BUFFERS
-
-	std::unique_ptr<DTBindObjectBase> transBuf = std::make_unique<BTransform>(*this, x, z, 4.0f, angle, 0.0f, angle);
-	transBuf->Bind(*this);
-	// create constant buffer for transformation matrix
-	//struct ConstantBuffer
-	//{
-	//	DirectX::XMMATRIX transform;
-	//};
-	//const ConstantBuffer cb =
-	//{
-	//	{
-	//		DirectX::XMMatrixTranspose(
-	//			DirectX::XMMatrixRotationZ(angle) *
-	//			DirectX::XMMatrixRotationX(angle) *
-	//			DirectX::XMMatrixTranslation(x,z,4.0f) *
-	//			GetProjection()
-	//			//DirectX::XMMatrixPerspectiveLH(1.0f,3.0f / 4.0f,0.5f,10.0f)
-	//		)
-	//	}
-	//};
-	//Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
-	//D3D11_BUFFER_DESC cbd;
-	//cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//cbd.Usage = D3D11_USAGE_DYNAMIC;
-	//cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//cbd.MiscFlags = 0u;
-	//cbd.ByteWidth = sizeof(cb);
-	//cbd.StructureByteStride = 0u;
-	//D3D11_SUBRESOURCE_DATA csd = {};
-	//csd.pSysMem = &cb;
-	//GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
-	//
-	//// bind constant buffer to vertex shader
-	//pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
-	
-	std::unique_ptr<BTopology> topp = std::make_unique<BTopology>(*this,D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	topp->Bind(*this);
-	
-	//GFX_THROW_INFO_ONLY(pContext->Draw(std::size(vertices), 0u));
-	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(std::size(indicies), 0u, 0u));
 }
 
 void DTGraphics::DrawIndexed(UINT count) noexcept
@@ -416,7 +303,24 @@ std::shared_ptr<RenderTargetTexture> DTGraphics::GetMainRenderTexture()
 	return mainSceneRenderTexture;
 }
 
+void DTGraphics::EnableWireframe()
+{
+	pContext->RSSetState(pWireRasterState.Get());
+}
+
+void DTGraphics::DisableWireframe()
+{
+	pContext->RSSetState(pSolidRasterState.Get());
+}
+
 bool DTGraphics::isPostprocessingEnabled()
 {
 	return postProcessingEnabled;
+}
+
+
+
+void DTGraphics::SetTopology(D3D11_PRIMITIVE_TOPOLOGY type)
+{
+	pContext->IASetPrimitiveTopology(type);
 }

@@ -1,31 +1,49 @@
-struct DS_OUTPUT
+struct DSOut
 {
-	float4 vPosition  : SV_POSITION;
+    float3 normal : Normal;
+    float3 worldPos : Position;
+    float2 texCoord : TexCoord;
+    float4 pos : SV_Position;
 };
 
-struct HS_CONTROL_POINT_OUTPUT
+struct HSOut
 {
-	float3 vPosition : WORLDPOS; 
+    float3 normal : Normal;
+    float3 worldPos : Position;
+    float2 texCoord : TexCoord;
+    float4 pos : SV_Position;
 };
 
-struct HS_CONSTANT_DATA_OUTPUT
+struct HSConstantDataOutput
 {
-	float EdgeTessFactor[3]			: SV_TessFactor;
-	float InsideTessFactor			: SV_InsideTessFactor;
+    float TessFactor[3] : SV_TessFactor;
+    float InsideTessFactor : SV_InsideTessFactor;
 };
-
-#define NUM_CONTROL_POINTS 3
 
 [domain("tri")]
-DS_OUTPUT main(
-	HS_CONSTANT_DATA_OUTPUT input,
-	float3 domain : SV_DomainLocation,
-	const OutputPatch<HS_CONTROL_POINT_OUTPUT, NUM_CONTROL_POINTS> patch)
+DSOut main(HSConstantDataOutput input, float3 barycentricCoords : SV_DomainLocation, const OutputPatch<HSOut, 3> patch)
 {
-	DS_OUTPUT Output;
+    DSOut output;
+    
+    output.pos = barycentricCoords.x * patch[0].pos +
+                 barycentricCoords.y * patch[1].pos +
+                 barycentricCoords.z * patch[2].pos;
 
-	Output.vPosition = float4(
-		patch[0].vPosition*domain.x+patch[1].vPosition*domain.y+patch[2].vPosition*domain.z,1);
+    float3 normal = normalize(barycentricCoords.x * patch[0].normal +
+                              barycentricCoords.y * patch[1].normal +
+                              barycentricCoords.z * patch[2].normal);
 
-	return Output;
+    float3 worldPos = barycentricCoords.x * patch[0].worldPos +
+                      barycentricCoords.y * patch[1].worldPos +
+                      barycentricCoords.z * patch[2].worldPos;
+
+    output.texCoord = barycentricCoords.x * patch[0].texCoord +
+                      barycentricCoords.y * patch[1].texCoord +
+                      barycentricCoords.z * patch[2].texCoord;
+
+    // Example: Adjust vertex position based on LOD level (pseudo-code)
+    output.normal = normal;
+    output.worldPos = worldPos;
+    
+    return output;
 }

@@ -12,12 +12,6 @@ void DTRenderObjectBase::Render(DTGraphics& gfx) const noexcept
 
 }
 
-void DTRenderObjectBase::Render(DTGraphics& gfx, BTransform &transform) const noexcept
-{
-	transform.Bind(gfx);
-	Render(gfx);
-}
-
 void DTRenderObjectBase::AddBind(std::unique_ptr<DTBindObjectBase> bind) noexcept
 {
 	assert("*Must* use AddIndexBuffer to bind index buffer" && typeid(*bind) != typeid(BIndexBuffer));

@@ -31,7 +31,9 @@ void DTSceneObject::Render(DTGraphics& gfx)
 	if (material != nullptr)
 		material->Bind(gfx);
 		
-	renderObject->Render(gfx, transform);
+	transform.Bind(gfx);
+
+	renderObject->Render(gfx);
 }
 
 void DTSceneObject::Update(float dt)

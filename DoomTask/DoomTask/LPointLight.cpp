@@ -76,8 +76,8 @@ void LPointLight::Render(DTGraphics& gfx)
 {
 	BTransform transf(gfx);
 	transf.SetPosition(position.x, position.y, position.z);
-	
-	lightRO->Render(gfx, transf);
+	transf.Bind(gfx);
+	lightRO->Render(gfx);
 }
 
 

@@ -64,7 +64,7 @@ RMesh::RMesh(DTGraphics& gfx, std::string path)
 	AddBind(std::make_unique<BInputLayout>(gfx, ied, pvsbc));
 
 	//Topology
-	AddBind(std::make_unique<BTopology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	//AddBind(std::make_unique<BTopology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 	//TODD:: add material bindable
 }
@@ -109,7 +109,7 @@ RMesh::RMesh(DTGraphics& gfx, aiMesh& mesh, const aiMaterial* const* materials, 
 	AddBind(std::make_unique<BInputLayout>(gfx, ied, pvsbc));
 
 	//Topology
-	AddBind(std::make_unique<BTopology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	//AddBind(std::make_unique<BTopology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 	// Material
 

@@ -20,3 +20,8 @@ void BDomainShader::Bind(DTGraphics& gfx) noexcept
 {
 	GetContext(gfx)->DSSetShader(pDomainShader.Get(), nullptr, 0u);
 }
+
+void BDomainShader::Unbind(DTGraphics& gfx) noexcept
+{
+	GetContext(gfx)->DSSetShader(nullptr, nullptr, 0u);
+}

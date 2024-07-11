@@ -1,6 +1,20 @@
 #include "DTRenderQueue.h"
 
-void DTRenderQueue::renderScene(DTGraphics& gfx, std::vector<std::unique_ptr<DTSceneObject>>& sceneObjects, float deltaTime)
+void DTRenderQueue::enableTessalationShaders(DTGraphics& gfx)
+{
+	HS.Bind(gfx);
+	DS.Bind(gfx);
+	gfx.SetTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+}
+
+void DTRenderQueue::disableTessalationShaders(DTGraphics& gfx)
+{
+	HS.Unbind(gfx);
+	DS.Unbind(gfx);
+	gfx.SetTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void DTRenderQueue::renderScene(DTGraphics& gfx, DTScene& scene, float deltaTime)
 {
 	lightGroup.BindGroup(gfx);
 	
@@ -10,12 +24,32 @@ void DTRenderQueue::renderScene(DTGraphics& gfx, std::vector<std::unique_ptr<DTS
 	// Bind Vertex and Pixel shader 
 	gBuffer.BindCollectionShaders(gfx);
 
-	// Render the scene
-	for (auto& so : sceneObjects)
+	std::vector<unsigned int> defaultObjects = scene.GetDefaultObjects();
+	std::vector<unsigned int> tessalatedObjects = scene.GetTessalatedObjects();
+
+	if (wireframeMode)
+		gfx.EnableWireframe();
+
+	// Render the default objects without tessalation
+	for (unsigned int soIdx : defaultObjects)
 	{
-		so->Update(deltaTime);
-		so->Render(gfx);
+		scene.sceneObjects[soIdx]->Update(deltaTime);
+		scene.sceneObjects[soIdx]->Render(gfx);
 	}
+
+	enableTessalationShaders(gfx);
+
+	// Render the scene objects with tessalation
+	for (unsigned int soIdx : tessalatedObjects)
+	{
+		scene.sceneObjects[soIdx]->Update(deltaTime);
+		scene.sceneObjects[soIdx]->Render(gfx);
+	}
+
+	disableTessalationShaders(gfx);
+	
+	if (wireframeMode)
+		gfx.DisableWireframe();
 }
 
 void DTRenderQueue::renderPostProcesses(DTGraphics& gfx)
@@ -29,7 +63,9 @@ void DTRenderQueue::renderPostProcesses(DTGraphics& gfx)
 DTRenderQueue::DTRenderQueue(DTGraphics& gfx)
 	:
 	lightGroup(gfx),
-	gBuffer(gfx)
+	gBuffer(gfx),
+	HS(gfx, L"TestingHS.cso"),
+	DS(gfx,L"TestingDS.cso")
 {
 	std::shared_ptr<RenderTargetTexture> targetTex = std::make_shared<RenderTargetTexture>(gfx, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -49,23 +85,17 @@ DTRenderQueue::DTRenderQueue(DTGraphics& gfx)
 		targetTex);
 }
 
-void DTRenderQueue::RenderObjects(DTGraphics& gfx, std::vector<std::unique_ptr<DTSceneObject>>& sceneObjects, std::vector<std::shared_ptr<DTRenderObjectBase>>& renderObjects, float deltaTime)
+void DTRenderQueue::RenderObjects(DTGraphics& gfx, DTScene& scene, float deltaTime)
 {
 	Clear(gfx);
 
-	// Disable default mesh shaders for the deffered rendering
-	for (int i = 0; i < renderObjects.size(); i++)
-	{
-		renderObjects[i]->DisableShaders();
-	}
-
-	renderScene(gfx, sceneObjects, deltaTime);
+	renderScene(gfx, scene, deltaTime);
 	renderPostProcesses(gfx);
 }
 
 void DTRenderQueue::Clear(DTGraphics& gfx)
 {
-	gfx.ClearBuffer(0.0f, 0.0f, 0.0f);
+	gfx.ClearBackBuffer(0.0f, 0.0f, 0.0f);
 	gBuffer.Clear(gfx);
 }
 
@@ -75,4 +105,9 @@ void DTRenderQueue::AddLight(float x, float y, float z)
 	light->SetPosition(DirectX::XMFLOAT3(x, y, z));
 
 	lightGroup.AddLight(std::move(light));
+}
+
+void DTRenderQueue::SetWireframeMode(bool enabled)
+{
+	wireframeMode = enabled;
 }

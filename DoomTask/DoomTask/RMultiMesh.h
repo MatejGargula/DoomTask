@@ -19,7 +19,6 @@ private:
 public:
     RMultiMesh(DTGraphics& gfx, std::string path);
     void Render(DTGraphics& gfx) const noexcept override;
-    void Render(DTGraphics& gfx, BTransform& transform) const noexcept override;
     void SetPS(DTGraphics& gfx, const std::wstring& path);
     void SetVS(DTGraphics& gfx, const std::wstring& path);
     

@@ -5,6 +5,9 @@
 #include "LLightGroup.h"
 #include "PostProcessPass.h"
 #include "GBuffer.h"
+#include "BHullShader.h"
+#include "BDomainShader.h"
+#include "DTScene.h"
 
 class DTRenderQueue
 {
@@ -13,16 +16,23 @@ private:
 	GBuffer gBuffer;
 	std::vector<PostProcessPass> postProcesses;
 
-	void renderScene(DTGraphics& gfx, std::vector<std::unique_ptr<DTSceneObject>>& sceneObjects, float deltaTime);
+	BHullShader HS;
+	BDomainShader DS;
+
+	bool wireframeMode = false;
+
+	void enableTessalationShaders(DTGraphics& gfx);
+	void disableTessalationShaders(DTGraphics& gfx);
+	void renderScene(DTGraphics& gfx, DTScene& scene, float deltaTime);
 	void renderPostProcesses(DTGraphics& gfx);
 public:
 	DTRenderQueue(DTGraphics& gfx);
 	void RenderObjects(
 		DTGraphics& gfx,
-		std::vector<std::unique_ptr<DTSceneObject>>& sceneObjects,
-		std::vector<std::shared_ptr<DTRenderObjectBase>>& renderObjects,
+		DTScene& scene,
 		float deltaTime);
 	void Clear(DTGraphics& gfx);
 	void AddLight(float x, float y, float z);
+	void SetWireframeMode(bool enabled);
 };
 

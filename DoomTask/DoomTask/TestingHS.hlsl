@@ -1,33 +1,47 @@
-struct VS_CONTROL_POINT_OUTPUT
+float TessellationFactor = 4.0f;
+
+struct VSOut
 {
-	float3 vPosition : WORLDPOS;
+    float3 normal : Normal;
+    float3 worldPos : Position;
+    float2 texCoord : TexCoord;
+    float4 pos : SV_Position;
 };
 
-struct HS_CONTROL_POINT_OUTPUT
+struct HSOut
 {
-	float3 vPosition : WORLDPOS; 
+    float3 normal : Normal;
+    float3 worldPos : Position;
+    float2 texCoord : TexCoord;
+    float4 pos : SV_Position;
+};
+
+struct HSConstantDataOutput
+{
+    float TessFactor[3] : SV_TessFactor;
+    float InsideTessFactor : SV_InsideTessFactor;
 };
 
 struct HS_CONSTANT_DATA_OUTPUT
 {
-	float EdgeTessFactor[3]			: SV_TessFactor;
-	float InsideTessFactor			: SV_InsideTessFactor;
+    float EdgeTessFactor[3] : SV_TessFactor;
+    float InsideTessFactor : SV_InsideTessFactor;
 };
 
 #define NUM_CONTROL_POINTS 3
 
 HS_CONSTANT_DATA_OUTPUT CalcHSPatchConstants(
-	InputPatch<VS_CONTROL_POINT_OUTPUT, NUM_CONTROL_POINTS> ip,
+	InputPatch<VSOut, NUM_CONTROL_POINTS> ip,
 	uint PatchID : SV_PrimitiveID)
 {
-	HS_CONSTANT_DATA_OUTPUT Output;
+    HS_CONSTANT_DATA_OUTPUT Output;
 
-	Output.EdgeTessFactor[0] = 
-		Output.EdgeTessFactor[1] = 
-		Output.EdgeTessFactor[2] = 
+    Output.EdgeTessFactor[0] =
+		Output.EdgeTessFactor[1] =
+		Output.EdgeTessFactor[2] =
 		Output.InsideTessFactor = 15;
 
-	return Output;
+    return Output;
 }
 
 [domain("tri")]
@@ -35,14 +49,17 @@ HS_CONSTANT_DATA_OUTPUT CalcHSPatchConstants(
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("CalcHSPatchConstants")]
-HS_CONTROL_POINT_OUTPUT main( 
-	InputPatch<VS_CONTROL_POINT_OUTPUT, NUM_CONTROL_POINTS> ip, 
+HSOut main(
+	InputPatch<VSOut, NUM_CONTROL_POINTS> ip,
 	uint i : SV_OutputControlPointID,
-	uint PatchID : SV_PrimitiveID )
+	uint PatchID : SV_PrimitiveID)
 {
-	HS_CONTROL_POINT_OUTPUT Output;
+    HSOut Output;
 
-	Output.vPosition = ip[i].vPosition;
+    Output.worldPos = ip[i].worldPos;
+    Output.normal = ip[i].normal;
+    Output.texCoord = ip[i].texCoord;
+    Output.pos = ip[i].pos;
 
-	return Output;
+    return Output;
 }

@@ -20,3 +20,8 @@ void BHullShader::Bind(DTGraphics& gfx) noexcept
 {
 	GetContext(gfx)->HSSetShader(pHullShader.Get(), nullptr, 0u);
 }
+
+void BHullShader::Unbind(DTGraphics& gfx) noexcept
+{
+	GetContext(gfx)->HSSetShader(nullptr, nullptr, 0u);
+}
