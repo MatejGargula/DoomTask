@@ -156,6 +156,16 @@ void DTApp::handleKeyboardInput(float dt)
 	{
 		renderQueue.SetPostProcessingEnabled(false);
 	}
+	if (window.keyboard.KeyIsPressed('M'))
+	{
+		window.DisableCursor();
+		window.ConfineCursor();
+	}
+	if (window.keyboard.KeyIsPressed('N'))
+	{
+		window.EnableCursor();
+		window.FreeCursor();
+	}
 
 	window.Gfx().camera->UpdateMovement(dt, movingForward, movingBackward, movingLeft, movingRight);
 }
