@@ -61,3 +61,8 @@ void BTexture::Bind(DTGraphics& gfx) noexcept
 {
 	GetContext(gfx)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
 }
+
+void BTexture::BindDS(DTGraphics& gfx) noexcept
+{
+	GetContext(gfx)->DSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
+}

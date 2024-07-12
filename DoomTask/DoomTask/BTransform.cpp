@@ -28,6 +28,11 @@ BTransform::BTransform(DTGraphics& gfx)
 		pVcbuf = std::make_unique<BVertexConstantBuffer<Transforms>>(gfx, 0u);
 	}
 
+	if (!pHcbuf)
+	{
+		pHcbuf = std::make_unique<BHullConstantBuffer<HullShaderConstData>>(gfx, 0u);
+	}
+
 	if (!pPcbuf)
 	{
 		pPcbuf = std::make_unique<BPixelConstantBuffer<CbuffCameraData>>(gfx, 0u);
@@ -46,6 +51,11 @@ BTransform::BTransform(DTGraphics& gfx, float xPos, float yPos, float zPos, floa
 		pVcbuf = std::make_unique<BVertexConstantBuffer<BTransform::Transforms>>(gfx, 0u);
 	}
 
+	if (!pHcbuf)
+	{
+		pHcbuf = std::make_unique<BHullConstantBuffer<HullShaderConstData>>(gfx, 0u);
+	}
+
 	if (!pPcbuf)
 	{
 		pPcbuf = std::make_unique<BPixelConstantBuffer<CbuffCameraData>>(gfx, 0u);
@@ -60,6 +70,17 @@ void BTransform::Bind(DTGraphics& gfx) noexcept
 
 	pVcbuf->Update(gfx, dataVert);
 	pVcbuf->Bind(gfx);
+
+	HullShaderConstData dataHull = {};
+	dataHull.CameraPosition = gfx.camera->GetPosition();
+	//TODO: move this to config
+	dataHull.TessellationRange = 20.0f;
+	dataHull.MaxTessFactor = 16.0f;
+	dataHull.MinTessFactor = 1.0f;
+
+
+	pHcbuf->Update(gfx, dataHull);
+	pHcbuf->Bind(gfx);
 
 	CbuffCameraData dataPix = {};
 //	dataPix.pos = 

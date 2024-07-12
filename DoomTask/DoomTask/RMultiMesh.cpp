@@ -5,8 +5,8 @@ RMultiMesh::RMultiMesh(DTGraphics& gfx, std::string path)
 	// Shaders
 	//ID3DBlob* pvsbc = pvs->GetBytecode();
 	//AddBind(std::move(pvs));
-	VS = std::make_unique<BVertexShader>(gfx, L"PhongVS.cso");
-	PS = std::make_unique<BPixelShader>(gfx, L"PhongPS.cso");
+	VS = std::make_unique<BVertexShader>(gfx, L"DefferedCollectionVS.cso");
+	PS = std::make_unique<BPixelShader>(gfx, L"DefferedCollectionPS.cso");
 
 	Assimp::Importer imp;
 

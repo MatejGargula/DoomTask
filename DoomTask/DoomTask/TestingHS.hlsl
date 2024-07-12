@@ -1,4 +1,12 @@
-float TessellationFactor = 4.0f;
+cbuffer ConstantBuffer : register(b0)
+{
+    float3 CameraPosition; // Camera position in world space
+    float pad1;
+    float TessellationRange; // Max distance for tessellation factor adjustment
+    float MinTessFactor; // Minimum tessellation factor
+    float MaxTessFactor; // Maximum tessellation factor
+    float pad2;
+};
 
 struct VSOut
 {
@@ -35,11 +43,22 @@ HS_CONSTANT_DATA_OUTPUT CalcHSPatchConstants(
 	uint PatchID : SV_PrimitiveID)
 {
     HS_CONSTANT_DATA_OUTPUT Output;
+    
+     // Calculate the center position of the patch
+    float3 patchCenter = (ip[0].worldPos + ip[1].worldPos + ip[2].worldPos) / 3.0f;
 
-    Output.EdgeTessFactor[0] =
-		Output.EdgeTessFactor[1] =
-		Output.EdgeTessFactor[2] =
-		Output.InsideTessFactor = 15;
+    // Calculate the distance from the patch center to the camera
+    float distanceToCamera = distance(patchCenter, CameraPosition);
+
+    // Adjust tessellation factors based on distance
+    
+    
+    float TessellationFactor = lerp(MaxTessFactor, MinTessFactor, saturate(distanceToCamera / TessellationRange));;
+
+    Output.EdgeTessFactor[0] = TessellationFactor;
+	Output.EdgeTessFactor[1] = TessellationFactor;
+	Output.EdgeTessFactor[2] = TessellationFactor;
+    Output.InsideTessFactor = TessellationFactor;
 
     return Output;
 }

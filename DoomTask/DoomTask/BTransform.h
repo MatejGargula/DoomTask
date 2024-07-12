@@ -21,18 +21,22 @@ private:
 		DirectX::XMMATRIX modelViewProj;
 	};
 
+	struct HullShaderConstData
+	{
+		DirectX::XMFLOAT3 CameraPosition;
+		float pad1;
+
+		float TessellationRange;
+		float MinTessFactor;
+		float MaxTessFactor;
+		float pad2;
+	};
+
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 rotation;
 
-	//float x;
-	//float y;
-	//float z;
-	//
-	//float rotX;
-	//float rotY;
-	//float rotZ;
-
 	std::unique_ptr<BVertexConstantBuffer<Transforms>> pVcbuf;
+	std::unique_ptr<BHullConstantBuffer<HullShaderConstData>> pHcbuf;
 	std::unique_ptr<BPixelConstantBuffer<CbuffCameraData>> pPcbuf;
 
 	DirectX::XMMATRIX modelMat;
