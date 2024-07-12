@@ -31,10 +31,6 @@ void DTApp::initScene()
 	renderObjects[TESTING_SPHERE] = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\Sphere.obj");;
 	renderObjects[LIGHT_MESH] = std::make_shared<RMultiMesh>(window.Gfx(), "Models\\LightMesh.obj");;
 
-	//renderObjects[LEVEL_MESH]->DisableShaders();
-	//renderObjects[TESTING_SPHERE]->DisableShaders();
-	//renderObjects[LIGHT_MESH]->DisableShaders();
-
 	std::unique_ptr<DTSceneObject> level = std::make_unique<DTSceneObject>(window.Gfx(), renderObjects[LEVEL_MESH]);
 	level->transform.SetPosition(0.0f, -3.0f, 0.0f);
 	level->transform.SetRotation(0.0f, 0.0f, 0.0f);
@@ -63,7 +59,6 @@ void DTApp::initScene()
 	sphere4->transform.SetRotation(0.0f, 0.0f, 0.0f);
 	sphere4->type = DTSceneObject::Type::TESSALATED;
 	scene.AddSceneObject(std::move(sphere4));
-
 
 	scene.AddLight(window.Gfx(), 0.0f, 0.0f, 0.0f);
 	scene.AddLight(window.Gfx(), 20.0f, 0.0f, 42.0f);
@@ -161,9 +156,6 @@ void DTApp::handleKeyboardInput(float dt)
 	{
 		renderQueue.SetPostProcessingEnabled(false);
 	}
-
-
-	
 
 	window.Gfx().camera->UpdateMovement(dt, movingForward, movingBackward, movingLeft, movingRight);
 }
