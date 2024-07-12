@@ -12,5 +12,5 @@ Controls:
   - K : turns off the wireframe mode
   - O : turns on the "old school" post-process filter
   - L : turns off the "old school" post-process filter  
-  - M : Frees the mouse from the window
-  - N : Confines/Hides the mouse in the window 
+  - N : Frees the mouse from the window
+  - M : Confines/Hides the mouse in the window 
