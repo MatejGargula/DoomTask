@@ -2,6 +2,10 @@
 #include <vector>
 #include <DirectXMath.h>
 
+/// <summary>
+/// Templated class for storing the indexed triangle list for index and vertex buffer.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template<class T>
 class IndexedTriangleList
 {
@@ -16,7 +20,6 @@ public:
 		assert(indices.size() % 3 == 0);
 	}
 
-public:
 	std::vector<T> vertices;
 	std::vector<unsigned short> indices;
 };

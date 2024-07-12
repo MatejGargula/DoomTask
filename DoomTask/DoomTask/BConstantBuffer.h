@@ -3,10 +3,19 @@
 #include "DTBindObjectBase.h"
 #include "DTThrowMacros.h"
 
+/// <summary>
+/// Templated base class for creating and binding constant buffers.
+/// </summary>
+/// <typeparam name="C">structure of data to be stored in the constant buffer </typeparam>
 template<typename C>
 class BConstantBuffer : public DTBindObjectBase
 {
 public:
+	/// <summary>
+	/// Updates the data stored in the constant buffer
+	/// </summary>
+	/// <param name="gfx">Main graphics class </param>
+	/// <param name="consts"> new constant buffer data </param>
 	void Update(DTGraphics& gfx, const C& consts)
 	{
 		// Needed for macro throws
@@ -22,6 +31,7 @@ public:
 		memcpy(msr.pData, &consts, sizeof(consts));
 		GetContext(gfx)->Unmap(pConstantBuffer.Get(), 0u);
 	}
+
 	BConstantBuffer(DTGraphics& gfx, const C& consts, UINT slot)
 		:
 		slotNum(slot)
@@ -64,7 +74,9 @@ protected:
 	UINT slotNum;
 };
 
-
+/// <summary>
+/// Templated base class for creating and binding constant buffer to the vertex shader. 
+/// </summary>
 template<typename C>
 class BVertexConstantBuffer : public BConstantBuffer<C>
 {
@@ -79,6 +91,9 @@ public:
 	}
 };
 
+/// <summary>
+/// Templated base class for creating and binding constant buffer to the pixel shader. 
+/// </summary>
 template<typename C>
 class BPixelConstantBuffer : public BConstantBuffer<C>
 {
@@ -93,6 +108,9 @@ public:
 	}
 };
 
+/// <summary>
+/// Templated base class for creating and binding constant buffer to the hull shader. 
+/// </summary>
 template<typename C>
 class BHullConstantBuffer : public BConstantBuffer<C>
 {
@@ -107,6 +125,9 @@ public:
 	}
 };
 
+/// <summary>
+/// Templated base class for creating and binding constant buffer to the domain shader. 
+/// </summary>
 template<typename C>
 class BDomainConstantBuffer : public BConstantBuffer<C>
 {

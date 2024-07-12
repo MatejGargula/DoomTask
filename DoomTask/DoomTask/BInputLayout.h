@@ -2,6 +2,9 @@
 
 #include "DTBindObjectBase.h"
 
+/// <summary>
+/// Class for storing and binding the InputLayout in the pipeline
+/// </summary>
 class BInputLayout : public DTBindObjectBase
 {
 public:

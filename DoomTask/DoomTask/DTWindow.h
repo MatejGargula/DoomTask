@@ -10,7 +10,9 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
-//TODO: Add docs
+/// <summary>
+/// Main class for handling the manipulation with windows window. Holds the main windows handels.
+/// </summary>
 class DTWindow
 {
 private:
@@ -23,17 +25,31 @@ private:
 
 	std::vector<char> rawBuffer;
 
+	/// <summary>
+	/// Hides the cursor
+	/// </summary>
 	void hideCursor();
+
+	/// <summary>
+	/// Shows the cursor
+	/// </summary>
 	void showCursor();
 
 #pragma region Nested Classes
 public:
+	/// <summary>
+	/// Base exception for the window exceptions.
+	/// </summary>
 	class Exception : public DTException
 	{
 		using DTException::DTException;
 	public:
 		static std::string TranslateErrorCode(HRESULT hr) noexcept;
 	};
+
+	/// <summary>
+	/// Standard exception for the window problems.
+	/// </summary>
 	class HrException : public Exception
 	{
 	public:
@@ -45,6 +61,10 @@ public:
 	private:
 		HRESULT hr;
 	};
+
+	/// <summary>
+	/// Exception for detecting no graphics.
+	/// </summary>
 	class NoGfxException : public Exception
 	{
 	public:
@@ -53,6 +73,10 @@ public:
 	};
 
 private:
+
+	/// <summary>
+	/// Class for handling and creating the windwows class
+	/// </summary>
 	class DTWindowClass
 	{
 	private:
@@ -72,7 +96,16 @@ private:
 
 #pragma region Windows Callback
 private:
+	/// <summary>
+	/// Sets up the main message pump.
+	/// </summary>
+	/// <returns> windows LRESULT </returns>
 	static LRESULT CALLBACK HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+	
+	/// <summary>
+	/// Forwads the windows messages to the HandleMessages class. 
+	/// </summary>
+	/// <returns> windows LRESULT </returns>
 	static LRESULT CALLBACK HandleMessageThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT CALLBACK HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;	
 #pragma endregion
@@ -89,8 +122,23 @@ public:
 	DTGraphics& Gfx();
 	void SetTitle(const std::string& title);
 
+	/// <summary>
+	/// Enables the cursor in the window.
+	/// </summary>
 	void EnableCursor();
+
+	/// <summary>
+	/// Disables the cursor in the window.
+	/// </summary>
 	void DisableCursor();
+
+	/// <summary>
+	/// Confines the mouse in the created window.
+	/// </summary>
 	void ConfineCursor();
+
+	/// <summary>
+	/// Frees the cursor from this window.
+	/// </summary>
 	void FreeCursor();
 };

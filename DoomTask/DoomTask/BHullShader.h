@@ -1,5 +1,9 @@
 #pragma once
 #include "DTBindObjectBase.h"
+
+/// <summary>
+/// Class for storing and binding a hull shader in the pipeline
+/// </summary>
 class BHullShader : public DTBindObjectBase
 {
 public:

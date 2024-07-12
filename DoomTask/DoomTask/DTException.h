@@ -4,7 +4,9 @@
 #include <string>
 #include <sstream>
 
-//TODO: Add docs
+/// <summary>
+/// The standard exception of this application 
+/// </summary>
 class DTException : public std::exception
 {
 public:

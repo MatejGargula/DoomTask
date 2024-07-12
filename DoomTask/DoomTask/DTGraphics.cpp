@@ -1,5 +1,4 @@
 #include "DTGraphics.h"
-#include "dxerr.h"
 #include "DTWindow.h"
 #include "DTThrowMacros.h"
 #include "DTConfig.h"
@@ -69,14 +68,12 @@ HRESULT DTGraphics::HrException::GetErrorCode() const noexcept
 
 std::string DTGraphics::HrException::GetErrorString() const noexcept
 {
-	return (char*)DXGetErrorString(hr);
+	return "DTGraphics HR Exception";
 }
 
 std::string DTGraphics::HrException::GetErrorDescription() const noexcept
 {
-	char buf[512];
-	DXGetErrorDescription(hr, buf, sizeof(buf));
-	return buf;
+	return "DTGraphics HR Exception Description";
 }
 
 std::string DTGraphics::HrException::GetErrorInfo() const noexcept
@@ -200,7 +197,6 @@ DTGraphics::DTGraphics(HWND hWnd)
 	
 	// Render target
 	DisablePostProcessing();
-	//EnablePostProcessing();
 
 	// configure viewport
 	D3D11_VIEWPORT vp = {};
@@ -271,10 +267,9 @@ void DTGraphics::ClearBackBuffer(float r, float g, float b) noexcept
 	mainDepthRenderTexture->Clear(*this);
 	
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	//pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
-void DTGraphics::DrawIndexed(UINT count) noexcept
+void DTGraphics::DrawIndexed(UINT count)
 {
 	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
 }

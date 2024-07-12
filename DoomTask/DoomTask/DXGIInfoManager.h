@@ -5,6 +5,9 @@
 #include <dxgidebug.h>
 #include <string>
 
+/// <summary>
+/// Class for managing the infomations about error in the pipeline. 
+/// </summary>
 class DxgiInfoManager
 {
 public:

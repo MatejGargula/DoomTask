@@ -16,11 +16,15 @@
 #include <memory>
 #include <random>
 
+// Forward declaration
 class DTCamera;
 class DepthStencilTexture;
 class RenderTargetTexture;
 
-//TODO: Add docs
+/// <summary>
+/// Main graphical class of the application. Handles rendering, context and device creation. 
+/// Modifies the graphical pipeline. 
+/// </summary>
 class DTGraphics
 {
 	friend class GBuffer;
@@ -51,9 +55,21 @@ public:
 	DTGraphics(const DTGraphics&) = delete;
 	DTGraphics& operator=(const DTGraphics&) = delete;
 
+	/// <summary>
+	/// Handles the end of the frame rendering.
+	/// </summary>
+	/// <returns></returns>
 	void EndFrame();
+
+	/// <summary>
+	/// Clears the main backbuffer of the screen.
+	/// </summary>
 	void ClearBackBuffer(float r, float g, float b) noexcept;
-	void DrawIndexed(UINT count) noexcept;
+	
+	/// <summary>
+	/// Sends a indexed draw call.
+	/// </summary>
+	void DrawIndexed(UINT count);
 	
 	/// <summary>
 	/// Switches the render target from back buffer to a main renderTexture.
@@ -75,17 +91,34 @@ public:
 	/// </summary>
 	bool isPostprocessingEnabled();
 
+	/// <summary>
+	/// Sets the current topology for rendering meshes.
+	/// </summary>
 	void SetTopology(D3D11_PRIMITIVE_TOPOLOGY type);
+	
+	/// <summary>
+	/// Enables wireframe mode 
+	/// </summary>
 	void EnableWireframe();
+
+	/// <summary>
+	/// Disables wireframe mode
+	/// </summary>
 	void DisableWireframe();
 
 #pragma region Nested Classes
 
+	/// <summary>
+	/// Base class for graphical exceptions
+	/// </summary>
 	class Exception : public DTException
 	{
 		using DTException::DTException;
 	};
 
+	/// <summary>
+	/// Standard graphical exception.
+	/// </summary>
 	class HrException : public Exception
 	{
 	public:
@@ -101,6 +134,9 @@ public:
 		std::string info;
 	};
 
+	/// <summary>
+	/// Exception for catching the device removed exception.
+	/// </summary>
 	class DeviceRemovedException : public HrException
 	{
 		using HrException::HrException;
@@ -110,6 +146,9 @@ public:
 		std::string reason;
 	};
 
+	/// <summary>
+	/// Exception for reporting error in the pipeline set up
+	/// </summary>
 	class InfoException : public Exception
 	{
 	public:

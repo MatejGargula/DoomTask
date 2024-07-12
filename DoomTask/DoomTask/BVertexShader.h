@@ -2,6 +2,9 @@
 
 #include "DTBindObjectBase.h"
 
+/// <summary>
+/// Class for storing and binding a vertex shader in the pipeline
+/// </summary>
 class BVertexShader : public DTBindObjectBase
 {
 public:

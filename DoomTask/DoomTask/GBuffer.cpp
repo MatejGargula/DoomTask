@@ -57,7 +57,7 @@ void GBuffer::BindCollectionShaders(DTGraphics& gfx)
 	PS.Bind(gfx);
 }
 
-std::vector<std::shared_ptr<RenderTargetTexture>> GBuffer::GetRenderTextures()
+std::vector<std::shared_ptr<RenderTargetTexture>>& GBuffer::GetRenderTextures()
 {
 	return gTextures;
 }

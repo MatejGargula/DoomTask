@@ -16,7 +16,7 @@ void DTRenderQueue::disableTessalationShaders(DTGraphics& gfx)
 
 void DTRenderQueue::renderScene(DTGraphics& gfx, DTScene& scene, float deltaTime)
 {
-	lightGroup.BindGroup(gfx);
+	scene.lightGroup.BindGroup(gfx);
 	
 	// Bind the G-Buffer textures as multiple render targets
 	gBuffer.BindAsRenderTarget(gfx);
@@ -29,6 +29,8 @@ void DTRenderQueue::renderScene(DTGraphics& gfx, DTScene& scene, float deltaTime
 
 	if (wireframeMode)
 		gfx.EnableWireframe();
+
+	scene.lightGroup.RenderLightsRO(gfx);
 
 	// Render the default objects without tessalation
 	for (unsigned int soIdx : defaultObjects)
@@ -54,6 +56,9 @@ void DTRenderQueue::renderScene(DTGraphics& gfx, DTScene& scene, float deltaTime
 
 void DTRenderQueue::renderPostProcesses(DTGraphics& gfx)
 {
+	pPostProcessControlCbuf->Update(gfx, postProcessContol);
+	pPostProcessControlCbuf->Bind(gfx);
+
 	for (unsigned int i = 0; i < postProcesses.size(); i++)
 	{
 		postProcesses[i].Render(gfx);
@@ -62,14 +67,18 @@ void DTRenderQueue::renderPostProcesses(DTGraphics& gfx)
 
 DTRenderQueue::DTRenderQueue(DTGraphics& gfx)
 	:
-	lightGroup(gfx),
 	gBuffer(gfx),
-	HS(gfx, L"TestingHS.cso"),
-	DS(gfx,L"TestingDS.cso")
+	HS(gfx, L"DistanceTessHS.cso"),
+	DS(gfx, L"DistanceTessDS.cso")
 {
+	postProcessContol = {};
+	postProcessContol.enablePostProcess = false;
+
 	std::shared_ptr<RenderTargetTexture> targetTex = std::make_shared<RenderTargetTexture>(gfx, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	// TODO: Refactor post processes
+	if (!pPostProcessControlCbuf)
+		pPostProcessControlCbuf = std::make_unique<BPixelConstantBuffer<PostProcessControlCbuf>>(gfx, 0u);
+
 	// Create post processes;
 	postProcesses.emplace_back(
 		gfx,
@@ -99,15 +108,12 @@ void DTRenderQueue::Clear(DTGraphics& gfx)
 	gBuffer.Clear(gfx);
 }
 
-void DTRenderQueue::AddLight(float x, float y, float z)
-{
-	std::unique_ptr<LPointLight> light = std::make_unique<LPointLight>();
-	light->SetPosition(DirectX::XMFLOAT3(x, y, z));
-
-	lightGroup.AddLight(std::move(light));
-}
-
 void DTRenderQueue::SetWireframeMode(bool enabled)
 {
 	wireframeMode = enabled;
+}
+
+void DTRenderQueue::SetPostProcessingEnabled(bool enabled)
+{
+	postProcessContol.enablePostProcess = enabled;
 }

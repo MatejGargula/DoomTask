@@ -1,6 +1,8 @@
 #include "DTScene.h"
 
-DTScene::DTScene()
+DTScene::DTScene(DTGraphics& gfx)
+	:
+	lightGroup(gfx)
 {
 }
 
@@ -33,4 +35,16 @@ void DTScene::AddSceneObject(std::unique_ptr<DTSceneObject> sceneObject)
 	sceneObjects.push_back(std::move(sceneObject));
 }
 
+void DTScene::SetUpLightMesh(std::shared_ptr<DTRenderObjectBase> ro)
+{
+	lightGroup.SetUpLightMeshes(ro);
+}
+
+void DTScene::AddLight(DTGraphics& gfx, float x, float y, float z)
+{
+	std::unique_ptr<LPointLight> light = std::make_unique<LPointLight>(gfx);
+	light->SetPosition(DirectX::XMFLOAT3(x, y, z));
+
+	lightGroup.AddLight(std::move(light));
+}
 

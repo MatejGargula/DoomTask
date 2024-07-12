@@ -2,6 +2,9 @@
 
 #include "DTBindObjectBase.h"
 
+/// <summary>
+/// Class for storing and binding a domain shader in the pipeline
+/// </summary>
 class BDomainShader : public DTBindObjectBase
 {
 public:

@@ -2,6 +2,9 @@
 
 #include "DTBindObjectBase.h"
 
+/// <summary>
+/// Class for setting the desired topology of the pipeline.
+/// </summary>
 class BTopology : public DTBindObjectBase
 {
 public:

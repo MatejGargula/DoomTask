@@ -4,13 +4,18 @@
 #include <bitset>
 #include <optional>
 
-//TODO: Add docs
+/// <summary>
+/// Class for handling the keyboard input
+/// </summary>
 class Keyboard
 {
 	friend class DTWindow;
 public: 
 #pragma region nested class
 
+	/// <summary>
+	/// Events of the keyboard keys
+	/// </summary>
 	class Event
 	{
 	public:

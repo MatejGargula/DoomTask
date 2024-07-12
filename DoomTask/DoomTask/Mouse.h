@@ -2,7 +2,9 @@
 #include <queue>
 #include <optional>
 
-//TODO: Add docs
+/// <summary>
+/// Class for handling the mouse input
+/// </summary>
 class Mouse
 {
 	friend class DTWindow;

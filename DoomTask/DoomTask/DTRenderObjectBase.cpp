@@ -9,7 +9,6 @@ void DTRenderObjectBase::Render(DTGraphics& gfx) const noexcept
 		b->Bind(gfx);
 
 	gfx.DrawIndexed(pIndexBuffer->GetCount());
-
 }
 
 void DTRenderObjectBase::AddBind(std::unique_ptr<DTBindObjectBase> bind) noexcept

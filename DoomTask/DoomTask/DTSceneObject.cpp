@@ -4,23 +4,13 @@
 DTSceneObject::DTSceneObject(DTGraphics& gfx)
 	:
 	transform(gfx),
-	renderObject(nullptr),
-	material(nullptr)
+	renderObject(nullptr)
 {}
 
 DTSceneObject::DTSceneObject(DTGraphics & gfx, std::shared_ptr<DTRenderObjectBase> ro)
 	:
 	transform(gfx),
-	renderObject(ro),
-	material(nullptr)
-{
-}
-
-DTSceneObject::DTSceneObject(DTGraphics & gfx, std::shared_ptr<DTRenderObjectBase> ro, std::shared_ptr<BMaterial> mat)
-	:
-	transform(gfx),
-	renderObject(ro),
-	material(mat)
+	renderObject(ro)
 {}
 
 void DTSceneObject::Render(DTGraphics& gfx)
@@ -28,9 +18,6 @@ void DTSceneObject::Render(DTGraphics& gfx)
 	if (renderObject == nullptr)
 		return;
 
-	if (material != nullptr)
-		material->Bind(gfx);
-		
 	transform.Bind(gfx);
 
 	renderObject->Render(gfx);
@@ -46,9 +33,5 @@ void DTSceneObject::SetRenderObject(std::shared_ptr<DTRenderObjectBase> ro)
 	renderObject = ro;
 }
 
-void DTSceneObject::SetMaterial(std::shared_ptr<BMaterial> mat)
-{
-	material = mat;
-}
 
 

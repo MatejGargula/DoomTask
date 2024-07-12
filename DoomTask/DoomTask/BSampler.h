@@ -1,6 +1,8 @@
 #pragma once
 #include "DTBindObjectBase.h"
-
+/// <summary>
+/// class for storing and binding sampler to the pipeline.
+/// </summary>
 class BSampler : public DTBindObjectBase
 {
 private:

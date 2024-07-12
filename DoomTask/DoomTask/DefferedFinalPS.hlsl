@@ -1,7 +1,7 @@
-Texture2D texDiffuse : register(t0);
-Texture2D texPosition : register(t1);
-Texture2D texNormal : register(t2);
-Texture2D texSpecular : register(t3);
+Texture2D texDiffuse : register(t0); // Diffuse color texture
+Texture2D texPosition : register(t1); // world position texture
+Texture2D texNormal : register(t2); // normal vectors texture
+Texture2D texSpecular : register(t3); // specular component texture
 
 SamplerState texSampler;
 
@@ -22,33 +22,27 @@ struct LPointLight
 
 cbuffer CLightBuf : register(b1)
 {
-    LPointLight lights[128];
+    LPointLight lights[256];
     int nLights;
     float pad[3];
 };
-
-//cbuffer CMaterial : register(b2)
-//{
-//    float3 ambientMat;
-//    bool useDiffTex;
-//    float3 diffuseMat;
-//    bool useSpecTex;
-//    float4 specMat;
-//};
 
 // calculates the color when using a point light.
 float3 CalcPointLight(LPointLight light, float3 normal, float3 pixelPos, float3 viewDir, float3 matDiffuse, float3 matSpecular, float shininess)
 {
     float3 lightDir = normalize(light.lightPosition - pixelPos);
+    
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
+    
     // specular shading
     float3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+ 
     // attenuation
     float distance = length(light.lightPosition - pixelPos);
     float attenuation = 1.0f / (light.att[0] + light.att[1] * distance + light.att[2] * (distance * distance));
-    //attenuation *= 20.0f;
+ 
     // combine results
     float3 ambient = light.lightAmbient * matDiffuse;
     float3 diffuse = light.lightDiffuse * diff * matDiffuse;
@@ -56,6 +50,7 @@ float3 CalcPointLight(LPointLight light, float3 normal, float3 pixelPos, float3 
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
+    
     return (ambient + diffuse + specular);
 }
 

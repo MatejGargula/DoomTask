@@ -2,6 +2,9 @@
 
 #include "DTRenderObjectBase.h"
 
+/// <summary>
+/// Class for storing the data about a single point light
+/// </summary>
 class LPointLight
 {
 	friend class LLightGroup;
@@ -29,13 +32,12 @@ private:
 	float linear;
 	float quadratic;
 
-	bool showLightRO;
-	std::shared_ptr<DTRenderObjectBase> lightRO;
+	BTransform transf;
 	std::unique_ptr<BPixelConstantBuffer<PointLightCBuf>> pPcbuf;
 
 public:
-	//LPointLight();
-	LPointLight(DirectX::XMFLOAT3 pos = {0.0f, 0.0f ,0.0f }, 
+	LPointLight(DTGraphics& gfx,
+		DirectX::XMFLOAT3 pos = {0.0f, 0.0f ,0.0f },
 		DirectX::XMFLOAT3 amb = { 0.2f, 0.2f ,0.2f },
 		DirectX::XMFLOAT3 diff = { 1.0f, 1.0f ,1.0f },
 		DirectX::XMFLOAT3 spec = { 1.0f, 1.0f ,1.0f },
@@ -43,10 +45,18 @@ public:
 		float linear = 0.045f,
 		float quadratic = 0.0075f
 	);
-	void Bind(DTGraphics& gfx) noexcept;
-	void EnableLightRenderObject(std::shared_ptr<DTRenderObjectBase> mesh);
-	void Render(DTGraphics& gfx);
-	void DisableLightRenderObject();
+
+	/// <summary>
+	/// Renders the render object (ro) to visualize the position of the light.
+	/// </summary>
+	/// <param name="gfx">Main graphics class </param>
+	/// <param name="ro"> Mesh (Render Object) to render </param>
+	void Render(DTGraphics& gfx, DTRenderObjectBase* ro);
+
+	/// <summary>
+	/// Sets the position of the point light.
+	/// </summary>
+	/// <param name="pos"> The new position of the point light </param>
 	void SetPosition(DirectX::XMFLOAT3 pos);
 };
 

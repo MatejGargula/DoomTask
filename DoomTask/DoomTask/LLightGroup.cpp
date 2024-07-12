@@ -17,6 +17,7 @@ void LLightGroup::updateData()
 
 LLightGroup::LLightGroup(DTGraphics& gfx)
 {
+	data = {};
 	if (!pPcbuf)
 	{
 		pPcbuf = std::make_unique<BPixelConstantBuffer<LightGroupCbuf>>(gfx, 1u);
@@ -41,8 +42,17 @@ void LLightGroup::AddLight(std::unique_ptr<LPointLight> light)
 
 void LLightGroup::RenderLightsRO(DTGraphics& gfx)
 {
+	if (!lightMeshesSetUp)
+		return;
+
 	for (unsigned int i = 0; i < lights.size(); i++)
 	{
-		lights[i]->Render(gfx);
+		lights[i]->Render(gfx, ro.get());
 	}
+}
+
+void LLightGroup::SetUpLightMeshes(std::shared_ptr<DTRenderObjectBase> roMesh)
+{
+	lightMeshesSetUp = true;
+	ro = roMesh;
 }

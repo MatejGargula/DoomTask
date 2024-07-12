@@ -5,6 +5,9 @@
 #include "DTThrowMacros.h"
 #include <string>
 
+/// <summary>
+/// Class for storing and binding the texture to the pipeline.
+/// </summary>
 class BTexture : public DTBindObjectBase
 {
 private: 

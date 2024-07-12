@@ -57,9 +57,6 @@
     <ClCompile Include="DTGraphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dxerr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DxgiInfoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -221,9 +218,6 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dxerr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -319,10 +313,10 @@
     <FxCompile Include="DefferedFinalPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="TestingHS.hlsl">
+    <FxCompile Include="DistanceTessHS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="TestingDS.hlsl">
+    <FxCompile Include="DistanceTessDS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -9,14 +9,16 @@
 #include "GBuffer.h"
 #include "DTRenderQueue.h"
 
-//TODO: Add docs
+/// <summary>
+/// Main class for the application control.
+/// </summary>
 class DTApp
 {
 private: 
 	enum {
-		BOX = 0,
-		LEVEL_MESH,
+		LEVEL_MESH = 0,
 		TESTING_SPHERE,
+		LIGHT_MESH,
 		NUM_RO
 	};
 	
@@ -24,21 +26,41 @@ private:
 	Timer timer;
 
 	std::vector<std::shared_ptr<DTRenderObjectBase>> renderObjects;
-	//std::vector<std::unique_ptr<DTSceneObject>> sceneObjects;
-	DTScene scene;
+	
 	DTRenderQueue renderQueue;
+	DTScene scene;
 
 	bool shouldCreateLight = false;
 
-	void RunFrame();
-	void InitScene();
-	void HandleMouseInput(float dt);
-	void HandleKeyboardInput(float dt);
+	/// <summary>
+	/// Processes and renders the current frame.
+	/// </summary>
+	void runFrame();
+
+	/// <summary>
+	/// Initializes the scene with objects and lights.
+	/// </summary>
+	void initScene();
+
+	/// <summary>
+	/// Handles the user mouse input.
+	/// </summary>
+	/// <param name="dt"></param>
+	void handleMouseInput(float dt);
+
+	/// <summary>
+	/// Handles the user keyboard input.
+	/// </summary>
+	/// <param name="dt"></param>
+	void handleKeyboardInput(float dt);
 
 public:
 	DTApp();
+
+	/// <summary>
+	/// Runs the application.
+	/// </summary>
+	/// <returns></returns>
 	int Run();
 
-	
 };
-

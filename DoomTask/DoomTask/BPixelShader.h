@@ -4,6 +4,9 @@
 
 class DTGraphics;
 
+/// <summary>
+/// Class for storing and binding a pixel shader in the pipeline
+/// </summary>
 class BPixelShader : public DTBindObjectBase
 {
 public:

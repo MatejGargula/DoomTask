@@ -6,7 +6,6 @@
 
 //#pragma comment(lib, "dxguid.lib")
 
-
 DxgiInfoManager::DxgiInfoManager()
 {
 	// define function signature of DXGIGetDebugInterface

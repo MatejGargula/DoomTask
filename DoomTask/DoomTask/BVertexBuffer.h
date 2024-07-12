@@ -3,6 +3,9 @@
 #include "DTBindObjectBase.h"
 #include "DTThrowMacros.h"
 
+/// <summary>
+/// Class for storing and binding the vertex buffer to the pipeline.
+/// </summary>
 class BVertexBuffer : public DTBindObjectBase
 {
 public:

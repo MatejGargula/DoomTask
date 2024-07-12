@@ -2,6 +2,9 @@
 
 #include "DTBindObjectBase.h"
 
+/// <summary>
+/// Class for storing and binding a index buffer in the pipeline
+/// </summary>
 class BIndexBuffer : public DTBindObjectBase
 {
 public:
