@@ -54,6 +54,8 @@ private:
 	/// <param name="dt"></param>
 	void handleKeyboardInput(float dt);
 
+	void storeLights();
+	void loadLights();
 public:
 	DTApp();
 

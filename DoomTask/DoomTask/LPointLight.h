@@ -23,7 +23,6 @@ private:
 		float pad5;
 	};
 
-	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 ambient;
 	DirectX::XMFLOAT3 diffuse;
 	DirectX::XMFLOAT3 specular;
@@ -36,6 +35,7 @@ private:
 	std::unique_ptr<BPixelConstantBuffer<PointLightCBuf>> pPcbuf;
 
 public:
+	DirectX::XMFLOAT3 position;
 	LPointLight(DTGraphics& gfx,
 		DirectX::XMFLOAT3 pos = {0.0f, 0.0f ,0.0f },
 		DirectX::XMFLOAT3 amb = { 0.2f, 0.2f ,0.2f },

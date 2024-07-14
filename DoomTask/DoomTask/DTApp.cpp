@@ -9,6 +9,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <fstream>
 
 DTApp::DTApp()
 	:
@@ -49,23 +50,18 @@ void DTApp::initScene()
 	scene.AddSceneObject(std::move(sphere2));
 
 	std::unique_ptr<DTSceneObject> sphere3 = std::make_unique<DTSceneObject>(window.Gfx(), renderObjects[TESTING_SPHERE]);
-	sphere3->transform.SetPosition(-24.0f, 0.0f, -2.0f);
+	sphere3->transform.SetPosition(59.4451f, 0.0f, 8.76196f);
 	sphere3->transform.SetRotation(0.0f, 0.0f, 0.0f);
 	sphere3->type = DTSceneObject::Type::TESSALATED;
 	scene.AddSceneObject(std::move(sphere3));
 
 	std::unique_ptr<DTSceneObject> sphere4 = std::make_unique<DTSceneObject>(window.Gfx(), renderObjects[TESTING_SPHERE]);
-	sphere4->transform.SetPosition(-8.0f, 0.0f, -28.0f);
+	sphere4->transform.SetPosition(9.03527f, 0.0f, -35.3904f);
 	sphere4->transform.SetRotation(0.0f, 0.0f, 0.0f);
 	sphere4->type = DTSceneObject::Type::TESSALATED;
 	scene.AddSceneObject(std::move(sphere4));
 
-	scene.AddLight(window.Gfx(), 0.0f, 0.0f, 0.0f);
-	scene.AddLight(window.Gfx(), 20.0f, 0.0f, 42.0f);
-	scene.AddLight(window.Gfx(), 0.0f, 0.0f, 25.0f);
-	scene.AddLight(window.Gfx(), 6.0f, 0.0f, 8.0f);
-	scene.AddLight(window.Gfx(), -8.0f, 0.0f, -35.0f);
-
+	loadLights();
 	scene.SetUpLightMesh(renderObjects[LIGHT_MESH]);
 }
 
@@ -168,4 +164,37 @@ void DTApp::handleKeyboardInput(float dt)
 	}
 
 	window.Gfx().camera->UpdateMovement(dt, movingForward, movingBackward, movingLeft, movingRight);
+}
+
+void DTApp::storeLights()
+{
+	std::ofstream fileIn("lights.txt");
+	
+	fileIn << scene.lightGroup.lights.size() << std::endl;
+
+	for (unsigned int i = 0; i < scene.lightGroup.lights.size(); i++)
+	{
+		fileIn << scene.lightGroup.lights[i]->position.x << " " << scene.lightGroup.lights[i]->position.y << " " << scene.lightGroup.lights[i]->position.z << std::endl;
+	}
+	fileIn.close();
+}
+
+void DTApp::loadLights()
+{
+	std::ifstream fileOut("lights.txt");
+	
+	float x, y, z, size;
+
+	fileOut >> size;
+
+	for (unsigned int i = 0; i < size; i++)
+	{
+		fileOut >> x;
+		fileOut >> y;
+		fileOut >> z;
+
+		y = 4.0f;
+		scene.AddLight(window.Gfx(), x, y, z);
+	}
+	
 }

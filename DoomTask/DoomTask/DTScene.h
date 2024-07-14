@@ -11,9 +11,10 @@
 class DTScene
 {
 	friend class DTRenderQueue;
+public:
+	LLightGroup lightGroup;
 private:
 	std::vector<std::unique_ptr<DTSceneObject>> sceneObjects;
-	LLightGroup lightGroup;
 
 	std::vector<unsigned int> defaultObjects;
 	std::vector<unsigned int> tessalatedObjects;
